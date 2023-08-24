@@ -6,16 +6,17 @@ import LoginForm from "./src/screens/LoginScreen";
 
 
 
-export default function App() {
+export default function App () {
   const [fontsLoaded] = useFonts({
-    "Roboto": require("./assets/fonts/RobotoMedium.ttf"),
+    "RobotoMedium": require("./assets/fonts/RobotoMedium.ttf"),
+    "RobotoRegular": require("./assets/fonts/RobotoRegular.ttf"),
   });
 
 
   return (
     <>
-      {/* <RegistrationForm /> */}
-      <LoginForm />
+      <RegistrationForm />
+      {/* <LoginForm /> */}
     </>
   );
 }

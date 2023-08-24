@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+import * as Font from 'expo-font';
 import {
   ImageBackground,
   StyleSheet,
@@ -10,15 +12,29 @@ import {
 import bgi from "../image/BGImage.jpg";
 
 
-
 const LoginForm = () => {
+  const [fontLoader, setfontLoader] = useState(false);
+
+  useEffect(() => {
+    async function loadFont() {
+      await Font.loadAsync({
+        RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
+        RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
+      });
+      setfontLoader(true);
+    }
+    loadFont();
+  }, []);
+
+  if (!fontLoader) { return null }; 
 
   return (
     <View style={styles.loginContainer}>
       <ImageBackground
         source={bgi}
         resizeMode="cover"
-        style={styles.imageBackground}>
+        style={styles.imageBackground}
+      >
         <View style={styles.formContainer}>
           <Text style={styles.screenTitle}>Увійти</Text>
           <View>
@@ -34,17 +50,19 @@ const LoginForm = () => {
               name="password"
               placeholder="Пароль"
             />
+            <TouchableOpacity style={styles.buttonShowPassword}>
+              <Text style={styles.showPasswordText}>Показати</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.buttonStyle}>
-              <Text style={{color:"#FFFFFF"}}>
-              Увійти
+              <Text style={{ color: '#FFFFFF' }}>Увійти</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.toRegisterPage}>
+                Немає акаунту? Зареєструватися
               </Text>
             </TouchableOpacity>
-            <Text style={styles.toRegisterPage}>
-            Немає акаунту? Зареєструватися
-          </Text>
           </View>
         </View>
-      
       </ImageBackground>
     </View>
   );
@@ -68,9 +86,8 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     marginBottom: 32,
     textAlign: "center",
-    fontFamily: "Roboto",
+    fontFamily: "RobotoMedium",
     fontSize: 30,
-    fontWeight: "bold",
     color: "#212121",
   },
   loginInputStyle: {
@@ -85,8 +102,18 @@ const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     borderWidth: 1,
     borderRadius: 10,
-    fontFamily: "Roboto",
+    fontFamily: "RobotoRegular",
     fontSize: 16,
+  },
+  buttonShowPassword: {
+    position: "absolute",
+    top: 85,
+    left: 290,
+  },
+  showPasswordText: {
+    fontFamily: "RobotoRegular",
+    fontSize: 16,
+    color: "#1B4371",
   },
   buttonStyle: {
     marginLeft: "auto",
@@ -104,6 +131,7 @@ const styles = StyleSheet.create({
   toRegisterPage: {
     textAlign: "center",
     color: "#1B4371",
+    fontFamily: "RobotoRegular",
     fontSize: 16,
   }
 })
