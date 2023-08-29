@@ -40,15 +40,17 @@ const RegistrationForm = () => {
         style={styles.imageBackground}
       >
         <View style={styles.formContainer}>
-          <Image source={defaultImage} style={styles.imageStyle} />
-          <TouchableOpacity>
-            <AntDesign
-              name="pluscircleo"
-              size={25}
-              color="#FF6C00"
-              style={styles.avatarAddButton}
-            />
-          </TouchableOpacity>
+          <View style={styles.avatarContainer}>
+            <Image source={defaultImage} style={styles.imageStyle} />
+            <TouchableOpacity>
+              <AntDesign
+                name="pluscircleo"
+                size={25}
+                color="#FF6C00"
+                style={styles.avatarAddButton}
+              />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.screenTitle}>Реєстрація</Text>
           <View>
             <TextInput
@@ -81,7 +83,7 @@ const RegistrationForm = () => {
                   styles.inputStyle,
                   activeInput === 'password' && styles.isActiveInput,
                 ]}
-                autoCapitalize='none'
+                autoCapitalize="none"
                 type="password"
                 name="password"
                 placeholder="Пароль"
@@ -121,9 +123,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 
+  avatarContainer: {
+    width: "100%",
+    position: "relative",
+    alignItems: "center",
+  },
+
   imageStyle: {
     position: 'absolute',
-    left: 145,
+    marginHorizontal: "auto",
     top: -60,
     width: 120,
     height: 120,
@@ -131,9 +139,9 @@ const styles = StyleSheet.create({
   },
 
   avatarAddButton: {
-    position: 'absolute',
-    left: 235,
-    top: 20,
+    position: "absolute",
+    top: 15,
+    left: 47,    
   },
 
   screenTitle: {

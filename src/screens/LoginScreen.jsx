@@ -14,6 +14,8 @@ import bgi from "../image/BGImage.jpg";
 
 const LoginForm = () => {
   const [fontLoader, setfontLoader] = useState(false);
+  const [activeInput, setActiveInput] = useState('');
+
 
   useEffect(() => {
     async function loadFont() {
@@ -39,20 +41,33 @@ const LoginForm = () => {
           <Text style={styles.screenTitle}>Увійти</Text>
           <View>
             <TextInput
-              style={styles.loginInputStyle}
+              onFocus={() => setActiveInput('email')}
+              onBlur={() => setActiveInput('')}
+              style={[
+                styles.inputStyle,
+                activeInput === 'email' && styles.isActiveInput,
+              ]}
               type="email"
               name="email"
               placeholder="Адреса електронної пошти"
             />
-            <TextInput
-              style={styles.loginInputStyle}
-              type="password"
-              name="password"
-              placeholder="Пароль"
-            />
-            <TouchableOpacity style={styles.buttonShowPassword}>
-              <Text style={styles.showPasswordText}>Показати</Text>
-            </TouchableOpacity>
+            <View style={styles.passwordInput}>
+              <TextInput
+                onFocus={() => setActiveInput('password')}
+                onBlur={() => setActiveInput('')}
+                style={[
+                  styles.inputStyle,
+                  activeInput === 'password' && styles.isActiveInput,
+                ]}
+                autoCapitalize="none"
+                type="password"
+                name="password"
+                placeholder="Пароль"
+              />
+              <TouchableOpacity style={styles.buttonShowPassword}>
+                <Text style={styles.showPasswordText}>Показати</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.buttonStyle}>
               <Text style={{ color: '#FFFFFF' }}>Увійти</Text>
             </TouchableOpacity>
@@ -75,65 +90,77 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   formContainer: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
+    paddingHorizontal: 16,
   },
   screenTitle: {
     paddingTop: 32,
     marginBottom: 32,
-    textAlign: "center",
-    fontFamily: "RobotoMedium",
+    textAlign: 'center',
+    fontFamily: 'RobotoMedium',
     fontSize: 30,
-    color: "#212121",
+    color: '#212121',
   },
-  loginInputStyle: {
-    marginLeft: "auto",
-    marginRight: "auto",
-    width: 343,
+
+  inputStyle: {
+    marginHorizontal: 'auto',
+    width: '100%',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
     marginBottom: 16,
-    paddingLeft: 16,
-    paddingTop: 16,
-    paddingBottom: 16,
-    backgroundColor: "#F6F6F6",
-    borderColor: "#E8E8E8",
+    backgroundColor: '#F6F6F6',
+    borderColor: '#E8E8E8',
     borderWidth: 1,
     borderRadius: 10,
-    fontFamily: "RobotoRegular",
+    fontFamily: 'RobotoRegular',
     fontSize: 16,
   },
+
+  isActiveInput: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#FF6C00',
+  },
+
+  passwordInput: {
+    width: '100%',
+    position: 'relative',
+  },
+
   buttonShowPassword: {
-    position: "absolute",
-    top: 85,
-    left: 290,
+    position: 'absolute',
+    top: '25%',
+    left: '75%',
   },
+
   showPasswordText: {
-    fontFamily: "RobotoRegular",
+    fontFamily: 'RobotoRegular',
     fontSize: 16,
-    color: "#1B4371",
+    color: '#1B4371',
   },
+
   buttonStyle: {
-    marginLeft: "auto",
-    marginRight: "auto",
-    width: 343,
-    paddingTop: 16,
-    paddingBottom: 16,
-    paddingLeft: 147,
-    paddingRight: 147,
+    display: 'flex',
+    marginHorizontal: 'auto',
+    paddingVertical: 16,
+    alignItems: 'center',
     marginBottom: 16,
-    backgroundColor: "#FF6C00",
+    backgroundColor: '#FF6C00',
     borderRadius: 30,
+    fontFamily: 'RobotoRegular',
     fontSize: 16,
   },
+
   toRegisterPage: {
-    textAlign: "center",
-    color: "#1B4371",
-    fontFamily: "RobotoRegular",
+    textAlign: 'center',
+    color: '#1B4371',
+    fontFamily: 'RobotoRegular',
     fontSize: 16,
-  }
-})
+  },
+});
 
 export default LoginForm;
