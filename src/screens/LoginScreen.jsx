@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import {
   ImageBackground,
+  Keyboard,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
-} from "react-native";
+  View,
+} from 'react-native';
 
-import bgi from "../image/BGImage.jpg";
-
+import bgi from '../image/BGImage.jpg';
+import { TouchableWithoutFeedback } from 'react-native';
 
 const LoginForm = () => {
   const [fontLoader, setfontLoader] = useState(false);
   const [activeInput, setActiveInput] = useState('');
-
 
   useEffect(() => {
     async function loadFont() {
@@ -28,60 +29,69 @@ const LoginForm = () => {
     loadFont();
   }, []);
 
-  if (!fontLoader) { return null }; 
+  if (!fontLoader) {
+    return null;
+  }
 
   return (
-    <View style={styles.loginContainer}>
-      <ImageBackground
-        source={bgi}
-        resizeMode="cover"
-        style={styles.imageBackground}
-      >
-        <View style={styles.formContainer}>
-          <Text style={styles.screenTitle}>Увійти</Text>
-          <View>
-            <TextInput
-              onFocus={() => setActiveInput('email')}
-              onBlur={() => setActiveInput('')}
-              style={[
-                styles.inputStyle,
-                activeInput === 'email' && styles.isActiveInput,
-              ]}
-              type="email"
-              name="email"
-              placeholder="Адреса електронної пошти"
-            />
-            <View style={styles.passwordInput}>
-              <TextInput
-                onFocus={() => setActiveInput('password')}
-                onBlur={() => setActiveInput('')}
-                style={[
-                  styles.inputStyle,
-                  activeInput === 'password' && styles.isActiveInput,
-                ]}
-                autoCapitalize="none"
-                type="password"
-                name="password"
-                placeholder="Пароль"
-              />
-              <TouchableOpacity style={styles.buttonShowPassword}>
-                <Text style={styles.showPasswordText}>Показати</Text>
-              </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.loginContainer}>
+        <ImageBackground
+          source={bgi}
+          resizeMode="cover"
+          style={styles.imageBackground}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? -120 : -140}
+          >
+            <View style={styles.formContainer}>
+              <Text style={styles.screenTitle}>Увійти</Text>
+              <View>
+                <TextInput
+                  onFocus={() => setActiveInput('email')}
+                  onBlur={() => setActiveInput('')}
+                  style={[
+                    styles.inputStyle,
+                    activeInput === 'email' && styles.isActiveInput,
+                  ]}
+                  type="email"
+                  name="email"
+                  placeholder="Адреса електронної пошти"
+                />
+                <View style={styles.passwordInput}>
+                  <TextInput
+                    onFocus={() => setActiveInput('password')}
+                    onBlur={() => setActiveInput('')}
+                    style={[
+                      styles.inputStyle,
+                      activeInput === 'password' && styles.isActiveInput,
+                    ]}
+                    autoCapitalize="none"
+                    type="password"
+                    name="password"
+                    placeholder="Пароль"
+                  />
+                  <TouchableOpacity style={styles.buttonShowPassword}>
+                    <Text style={styles.showPasswordText}>Показати</Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.buttonStyle}>
+                  <Text style={{ color: '#FFFFFF' }}>Увійти</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.toRegisterPage}>
+                    Немає акаунту? Зареєструватися
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity style={styles.buttonStyle}>
-              <Text style={{ color: '#FFFFFF' }}>Увійти</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.toRegisterPage}>
-                Немає акаунту? Зареєструватися
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   loginContainer: {
@@ -129,6 +139,7 @@ const styles = StyleSheet.create({
   passwordInput: {
     width: '100%',
     position: 'relative',
+    paddingBottom: 43,
   },
 
   buttonShowPassword: {

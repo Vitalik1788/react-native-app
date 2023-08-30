@@ -8,102 +8,114 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
-} from "react-native";
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 
-import defaultImage from "../image/default.jpg";
-import bgi from "../image/BGImage.jpg";
-import { AntDesign } from "@expo/vector-icons";
+import defaultImage from '../image/default.jpg';
+import bgi from '../image/BGImage.jpg';
+import { AntDesign } from '@expo/vector-icons';
 
-
-const RegistrationForm = () => { 
+const RegistrationForm = () => {
   const [fontLoader, setfontLoader] = useState(false);
-  const [activeInput, setActiveInput] = useState("");
+  const [activeInput, setActiveInput] = useState('');
 
   useEffect(() => {
     async function loadFont() {
-      await Font.loadAsync(
-        {
-          RobotoMedium: require("../../assets/fonts/RobotoMedium.ttf"),
-          RobotoRegular: require("../../assets/fonts/RobotoRegular.ttf"),
-        }
-      );
-      setfontLoader(true)}
-    loadFont()}, []);
+      await Font.loadAsync({
+        RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
+        RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
+      });
+      setfontLoader(true);
+    }
+    loadFont();
+  }, []);
 
-  if (!fontLoader) { return null };
+  if (!fontLoader) {
+    return null;
+  }
 
   return (
-    <View style={styles.registerContainer}>
-      <ImageBackground
-        source={bgi}
-        resizeMode="cover"
-        style={styles.imageBackground}
-      >
-        <View style={styles.formContainer}>
-          <View style={styles.avatarContainer}>
-            <Image source={defaultImage} style={styles.imageStyle} />
-            <TouchableOpacity>
-              <AntDesign
-                name="pluscircleo"
-                size={25}
-                color="#FF6C00"
-                style={styles.avatarAddButton}
-              />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.screenTitle}>Реєстрація</Text>
-          <View>
-            <TextInput
-              onFocus={() => setActiveInput('login')}
-              onBlur={() => setActiveInput('')}
-              style={[
-                styles.inputStyle,
-                activeInput === 'login' && styles.isActiveInput,
-              ]}
-              type="text"
-              name="login"
-              placeholder="Логін"
-            />
-            <TextInput
-              onFocus={() => setActiveInput('email')}
-              onBlur={() => setActiveInput('')}
-              style={[
-                styles.inputStyle,
-                activeInput === 'email' && styles.isActiveInput,
-              ]}
-              type="email"
-              name="email"
-              placeholder="Адреса електронної пошти"
-            />
-            <View style={styles.passwordInput}>
-              <TextInput
-                onFocus={() => setActiveInput('password')}
-                onBlur={() => setActiveInput('')}
-                style={[
-                  styles.inputStyle,
-                  activeInput === 'password' && styles.isActiveInput,
-                ]}
-                autoCapitalize="none"
-                type="password"
-                name="password"
-                placeholder="Пароль"
-              />
-              <TouchableOpacity style={styles.buttonShowPassword}>
-                <Text style={styles.showPasswordText}>Показати</Text>
-              </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.registerContainer}>
+        <ImageBackground
+          source={bgi}
+          resizeMode="cover"
+          style={styles.imageBackground}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? -120 : -140}
+          >
+            <View style={styles.formContainer}>
+              <View style={styles.avatarContainer}>
+                <Image source={defaultImage} style={styles.imageStyle} />
+                <TouchableOpacity>
+                  <AntDesign
+                    name="pluscircleo"
+                    size={25}
+                    color="#FF6C00"
+                    style={styles.avatarAddButton}
+                  />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.screenTitle}>Реєстрація</Text>
+              <View>
+                <TextInput
+                  onFocus={() => setActiveInput('login')}
+                  onBlur={() => setActiveInput('')}
+                  style={[
+                    styles.inputStyle,
+                    activeInput === 'login' && styles.isActiveInput,
+                  ]}
+                  type="text"
+                  name="login"
+                  placeholder="Логін"
+                />
+                <TextInput
+                  onFocus={() => setActiveInput('email')}
+                  onBlur={() => setActiveInput('')}
+                  style={[
+                    styles.inputStyle,
+                    activeInput === 'email' && styles.isActiveInput,
+                  ]}
+                  type="email"
+                  name="email"
+                  placeholder="Адреса електронної пошти"
+                />
+                <View style={styles.passwordInput}>
+                  <TextInput
+                    onFocus={() => setActiveInput('password')}
+                    onBlur={() => setActiveInput('')}
+                    style={[
+                      styles.inputStyle,
+                      activeInput === 'password' && styles.isActiveInput,
+                    ]}
+                    autoCapitalize="none"
+                    type="password"
+                    name="password"
+                    placeholder="Пароль"
+                  />
+                  <TouchableOpacity style={styles.buttonShowPassword}>
+                    <Text style={styles.showPasswordText}>Показати</Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.buttonStyle}>
+                  <Text style={{ color: '#FFFFFF' }}>Зареєструватися</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.toLoginPage}>Вже є акаунт? Увійти</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity style={styles.buttonStyle}>
-              <Text style={{ color: '#FFFFFF' }}>Зареєструватися</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={styles.toLoginPage}>Вже є акаунт? Увійти</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
-}
+};
 
 const styles = StyleSheet.create({
   registerContainer: {
@@ -124,14 +136,14 @@ const styles = StyleSheet.create({
   },
 
   avatarContainer: {
-    width: "100%",
-    position: "relative",
-    alignItems: "center",
+    width: '100%',
+    position: 'relative',
+    alignItems: 'center',
   },
 
   imageStyle: {
     position: 'absolute',
-    marginHorizontal: "auto",
+    marginHorizontal: 'auto',
     top: -60,
     width: 120,
     height: 120,
@@ -139,9 +151,9 @@ const styles = StyleSheet.create({
   },
 
   avatarAddButton: {
-    position: "absolute",
+    position: 'absolute',
     top: 15,
-    left: 47,    
+    left: 47,
   },
 
   screenTitle: {
@@ -154,7 +166,7 @@ const styles = StyleSheet.create({
   },
 
   inputStyle: {
-    marginHorizontal: "auto",
+    marginHorizontal: 'auto',
     width: '100%',
     paddingHorizontal: 16,
     paddingVertical: 16,
@@ -165,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontFamily: 'RobotoRegular',
     fontSize: 16,
-  },  
+  },
 
   isActiveInput: {
     backgroundColor: '#FFFFFF',
@@ -173,14 +185,15 @@ const styles = StyleSheet.create({
   },
 
   passwordInput: {
-    width: "100%",
-    position: "relative",
+    width: '100%',
+    position: 'relative',
+    marginBottom: 43,
   },
 
   buttonShowPassword: {
-    position: "absolute",
-    top: "25%",
-    left: "75%",
+    position: 'absolute',
+    top: '25%',
+    left: '75%',
   },
 
   showPasswordText: {
@@ -190,10 +203,10 @@ const styles = StyleSheet.create({
   },
 
   buttonStyle: {
-    display: "flex",
-    marginHorizontal: "auto",
+    display: 'flex',
+    marginHorizontal: 'auto',
     paddingVertical: 16,
-    alignItems: "center",    
+    alignItems: 'center',
     marginBottom: 16,
     backgroundColor: '#FF6C00',
     borderRadius: 30,
