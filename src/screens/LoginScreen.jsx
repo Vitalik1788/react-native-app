@@ -17,6 +17,9 @@ import { TouchableWithoutFeedback } from 'react-native';
 const LoginForm = () => {
   const [fontLoader, setfontLoader] = useState(false);
   const [activeInput, setActiveInput] = useState('');
+  const [securePassword, setSecurePassword] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     async function loadFont() {
@@ -32,6 +35,17 @@ const LoginForm = () => {
   if (!fontLoader) {
     return null;
   }
+
+  const handleSubmitForm = () => {
+    const user = {
+      email,
+      password,
+    };
+    console.log(user);
+
+    setEmail('');
+    setPassword('');
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -51,6 +65,8 @@ const LoginForm = () => {
                 <TextInput
                   onFocus={() => setActiveInput('email')}
                   onBlur={() => setActiveInput('')}
+                  onChangeText={setEmail}
+                  value={email}
                   style={[
                     styles.inputStyle,
                     activeInput === 'email' && styles.isActiveInput,
@@ -63,20 +79,31 @@ const LoginForm = () => {
                   <TextInput
                     onFocus={() => setActiveInput('password')}
                     onBlur={() => setActiveInput('')}
+                    onChangeText={setPassword}
+                    value={password}
                     style={[
                       styles.inputStyle,
                       activeInput === 'password' && styles.isActiveInput,
                     ]}
                     autoCapitalize="none"
+                    secureTextEntry={securePassword && true}
                     type="password"
                     name="password"
                     placeholder="Пароль"
                   />
-                  <TouchableOpacity style={styles.buttonShowPassword}>
-                    <Text style={styles.showPasswordText}>Показати</Text>
+                  <TouchableOpacity
+                    style={styles.buttonShowPassword}
+                    onPress={() => setSecurePassword(prev => !prev)}
+                  >                    
+                    <Text style={styles.showPasswordText}>
+                      {securePassword ? 'Показати' : 'Приховати'}
+                    </Text>
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.buttonStyle}>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  onPress={handleSubmitForm}
+                >
                   <Text style={{ color: '#FFFFFF' }}>Увійти</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>

@@ -15,8 +15,8 @@ export default function App () {
 
   return (
     <>
-      <RegistrationForm />
-      {/* <LoginForm /> */}
+      {/* <RegistrationForm /> */}
+      <LoginForm />
     </>
   );
 }
