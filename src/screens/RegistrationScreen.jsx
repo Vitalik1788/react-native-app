@@ -21,11 +21,11 @@ import { AntDesign } from '@expo/vector-icons';
 const RegistrationForm = () => {
   const [fontLoader, setfontLoader] = useState(false);
   const [activeInput, setActiveInput] = useState('');
+  const [userAvatar, setUserAvatar] = useState(null);
   const [securePassword, setSecurePassword] = useState(true);
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
 
   useEffect(() => {
     async function loadFont() {
@@ -43,17 +43,18 @@ const RegistrationForm = () => {
   }
 
   const handleSubmitForm = () => {
+    if (!login || !email || !password) return console.warn('Будь-ласка заповніть всі поля');
     const user = {
       login,
       email,
-      password
-    }
+      password,
+    };
     console.log(user);
 
     setLogin('');
     setEmail('');
     setPassword('');
-  }
+  };  
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -69,15 +70,31 @@ const RegistrationForm = () => {
           >
             <View style={styles.formContainer}>
               <View style={styles.avatarContainer}>
-                <Image source={defaultImage} style={styles.imageStyle} />
-                <TouchableOpacity>
-                  <AntDesign
-                    name="pluscircleo"
-                    size={25}
-                    color="#FF6C00"
-                    style={styles.avatarAddButton}
-                  />
-                </TouchableOpacity>
+                <Image
+                  source={userAvatar ? { uri: userAvatar } : defaultImage}
+                  style={styles.imageStyle}
+                />
+                <View>
+                  {!userAvatar ? (
+                    <TouchableOpacity>
+                      <AntDesign
+                        name="pluscircleo"
+                        size={25}
+                        color="#FF6C00"
+                        style={styles.avatarAddButton}
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity onPress={() => setUserAvatar(null)}>
+                      <AntDesign
+                        name="closecircleo"
+                        size={24}
+                        color="#BDBDBD"
+                        style={styles.avatarAddButton}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
               <Text style={styles.screenTitle}>Реєстрація</Text>
               <View>
@@ -125,9 +142,10 @@ const RegistrationForm = () => {
                   />
                   <TouchableOpacity
                     style={styles.buttonShowPassword}
-                    onPress={() => setSecurePassword((prev) => !prev)}>
+                    onPress={() => setSecurePassword(prev => !prev)}
+                  >
                     <Text style={styles.showPasswordText}>
-                      {securePassword ? "Показати" : "Приховати"}
+                      {securePassword ? 'Показати' : 'Приховати'}
                     </Text>
                   </TouchableOpacity>
                 </View>

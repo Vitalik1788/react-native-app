@@ -37,6 +37,7 @@ const LoginForm = () => {
   }
 
   const handleSubmitForm = () => {
+    if (!email || !password) return console.warn('Будь-ласка заповніть всі поля');
     const user = {
       email,
       password,
