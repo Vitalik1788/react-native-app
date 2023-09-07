@@ -64,6 +64,8 @@ const LoginForm = () => {
               <Text style={styles.screenTitle}>Увійти</Text>
               <View>
                 <TextInput
+                  autoCorrect={false}
+                  autoComplete="off"
                   onFocus={() => setActiveInput('email')}
                   onBlur={() => setActiveInput('')}
                   onChangeText={setEmail}
@@ -87,6 +89,8 @@ const LoginForm = () => {
                       activeInput === 'password' && styles.isActiveInput,
                     ]}
                     autoCapitalize="none"
+                    autoCorrect={false}
+                    autoComplete="off"
                     secureTextEntry={securePassword && true}
                     type="password"
                     name="password"
@@ -95,7 +99,7 @@ const LoginForm = () => {
                   <TouchableOpacity
                     style={styles.buttonShowPassword}
                     onPress={() => setSecurePassword(prev => !prev)}
-                  >                    
+                  >
                     <Text style={styles.showPasswordText}>
                       {securePassword ? 'Показати' : 'Приховати'}
                     </Text>

@@ -1,4 +1,5 @@
 // import { StatusBar } from 'expo-status-bar';
+import 'react-native-gesture-handler';
 import { useFonts } from "expo-font";
 import RegistrationForm from './src/screens/RegistrationScreen';
 import LoginForm from "./src/screens/LoginScreen";

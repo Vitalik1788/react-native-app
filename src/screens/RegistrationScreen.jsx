@@ -99,6 +99,8 @@ const RegistrationForm = () => {
               <Text style={styles.screenTitle}>Реєстрація</Text>
               <View>
                 <TextInput
+                  autoCorrect={false}
+                  autoComplete="off"
                   onFocus={() => setActiveInput('login')}
                   onBlur={() => setActiveInput('')}
                   onChangeText={setLogin}
@@ -112,6 +114,8 @@ const RegistrationForm = () => {
                   placeholder="Логін"
                 />
                 <TextInput
+                  autoCorrect={false}
+                  autoComplete="off"
                   onFocus={() => setActiveInput('email')}
                   onBlur={() => setActiveInput('')}
                   onChangeText={setEmail}
@@ -135,6 +139,8 @@ const RegistrationForm = () => {
                       activeInput === 'password' && styles.isActiveInput,
                     ]}
                     autoCapitalize="none"
+                    autoCorrect={false}
+                    autoComplete="off"
                     secureTextEntry={securePassword && true}
                     type="password"
                     name="password"
