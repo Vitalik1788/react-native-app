@@ -13,9 +13,10 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import defaultImage from '../image/default.jpg';
-import bgi from '../image/BGImage.jpg';
+import defaultImage from '../../assets/image/default.jpg';
+import bgi from '../../assets/image/BGImage.jpg';
 import { AntDesign } from '@expo/vector-icons';
 
 const RegistrationForm = () => {
@@ -26,6 +27,8 @@ const RegistrationForm = () => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function loadFont() {
@@ -55,6 +58,8 @@ const RegistrationForm = () => {
     setLogin('');
     setEmail('');
     setPassword('');
+
+    navigation.navigate('Home');
   };
 
   return (
@@ -159,9 +164,10 @@ const RegistrationForm = () => {
               >
                 <Text style={{ color: '#FFFFFF' }}>Зареєструватися</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.toLoginPage}>Вже є акаунт? Увійти</Text>
-              </TouchableOpacity>
+              <Text style={styles.toLoginPage}>
+                Вже є акаунт?
+                <Text onPress={() => navigation.navigate('Вхід')}>Увійти</Text>
+              </Text>
             </View>
           </View>
         </ImageBackground>
@@ -173,7 +179,7 @@ const RegistrationForm = () => {
 const styles = StyleSheet.create({
   registerContainer: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
 
   imageBackground: {

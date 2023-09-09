@@ -9,10 +9,11 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  TouchableWithoutFeedback,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import bgi from '../image/BGImage.jpg';
-import { TouchableWithoutFeedback } from 'react-native';
+import bgi from '../../assets/image/BGImage.jpg';
 
 const LoginForm = () => {
   const [fontLoader, setfontLoader] = useState(false);
@@ -20,6 +21,9 @@ const LoginForm = () => {
   const [securePassword, setSecurePassword] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigation = useNavigation();
+
 
   useEffect(() => {
     async function loadFont() {
@@ -47,6 +51,9 @@ const LoginForm = () => {
 
     setEmail('');
     setPassword('');
+
+    navigation.navigate('Home');
+
   };
 
   return (
@@ -112,11 +119,9 @@ const LoginForm = () => {
               >
                 <Text style={{ color: '#FFFFFF' }}>Увійти</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.toRegisterPage}>
-                  Немає акаунту? Зареєструватися
-                </Text>
-              </TouchableOpacity>
+              <Text style={styles.toRegisterPage}>
+                Немає акаунту?<Text onPress={()=> navigation.navigate("Реєстрація")}>Зареєструватися</Text>
+              </Text>
             </View>
           </View>
         </ImageBackground>

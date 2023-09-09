@@ -1,23 +1,39 @@
-// import { StatusBar } from 'expo-status-bar';
 import 'react-native-gesture-handler';
-import { useFonts } from "expo-font";
 import RegistrationForm from './src/screens/RegistrationScreen';
 import LoginForm from "./src/screens/LoginScreen";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import BottomsNav from './src/routes/BottomsNav';
 
 
-
+const MainStack = createStackNavigator();
 
 export default function App () {
-  const [fontsLoaded] = useFonts({
-    "RobotoMedium": require("./assets/fonts/RobotoMedium.ttf"),
-    "RobotoRegular": require("./assets/fonts/RobotoRegular.ttf"),
-  });
-
+  
 
   return (
     <>
-      <RegistrationForm />
-      {/* <LoginForm /> */}
+      <NavigationContainer>
+        <MainStack.Navigator initialRouteName="Home">
+          <MainStack.Screen
+            name="Реєстрація"
+            component={RegistrationForm}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="Вхід"
+            component={LoginForm}
+            options={{ headerShown: false }}
+          />
+
+          <MainStack.Screen
+            name="Home"
+            component={BottomsNav}
+            options={{ headerShown: false }}
+          />
+        </MainStack.Navigator>
+      </NavigationContainer>
     </>
   );
 }
