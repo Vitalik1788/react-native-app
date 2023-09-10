@@ -120,7 +120,7 @@ const LoginForm = () => {
                 <Text style={{ color: '#FFFFFF' }}>Увійти</Text>
               </TouchableOpacity>
               <Text style={styles.toRegisterPage}>
-                Немає акаунту?<Text onPress={()=> navigation.navigate("Реєстрація")}>Зареєструватися</Text>
+                Немає акаунту?<Text onPress={()=> navigation.navigate("Registration")}>Зареєструватися</Text>
               </Text>
             </View>
           </View>

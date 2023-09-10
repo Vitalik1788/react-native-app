@@ -166,7 +166,7 @@ const RegistrationForm = () => {
               </TouchableOpacity>
               <Text style={styles.toLoginPage}>
                 Вже є акаунт?
-                <Text onPress={() => navigation.navigate('Вхід')}>Увійти</Text>
+                <Text onPress={() => navigation.navigate('Login')}>Увійти</Text>
               </Text>
             </View>
           </View>
