@@ -62,7 +62,12 @@ return (
         headerRightContainerStyle: { paddingRight: 16 },
         headerLeftContainerStyle: { paddingLeft: 16 },
         headerRight: () => (
-          <MaterialCommunityIcons onPress={()=> navigation.navigate("Login")} name="logout" size={24} color="#BDBDBD" />
+          <MaterialCommunityIcons
+            onPress={() => navigation.navigate('Login')}
+            name="logout"
+            size={24}
+            color="#BDBDBD"
+          />
         ),
       }}
     />
@@ -73,9 +78,10 @@ return (
         headerTitle: 'Створити публікацію',
         headerRightContainerStyle: { paddingRight: 16 },
         headerLeftContainerStyle: { paddingLeft: 16 },
+        tabBarStyle: { display: 'none' },
         headerLeft: () => (
           <AntDesign
-            onPress={()=>navigation.navigate('Posts')}
+            onPress={() => navigation.navigate('Posts')}
             name="arrowleft"
             size={24}
             color="black"
