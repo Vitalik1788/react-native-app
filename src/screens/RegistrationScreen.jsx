@@ -162,7 +162,9 @@ const RegistrationForm = () => {
                 style={styles.buttonStyle}
                 onPress={handleSubmitForm}
               >
-                <Text style={{ color: '#FFFFFF' }}>Зареєструватися</Text>
+                <Text style={{ color: '#FFFFFF', fontSize: 16, }}>
+                  Зареєструватися
+                </Text>
               </TouchableOpacity>
               <Text style={styles.toLoginPage}>
                 Вже є акаунт?

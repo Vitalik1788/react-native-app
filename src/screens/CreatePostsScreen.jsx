@@ -6,15 +6,18 @@ import {
   Image,
   Text,
   TouchableWithoutFeedback,
-  Keyboard,  
+  Keyboard,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Feather } from '@expo/vector-icons';
 import { Input } from '@rneui/themed';
 
 const CreatePostsScreen = () => {
   const [fontLoader, setfontLoader] = useState(false);
-  const [userImg, setUserImg] = useState(null);
+  const [placeName, setPlaceName] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [userImg, setUserImg] = useState(require("../../assets/image/postsImg.jpg"));
 
   useEffect(() => {
     async function loadFont() {
@@ -31,33 +34,79 @@ const CreatePostsScreen = () => {
     return null;
   }
 
+  
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <View style={styles.imageBox}>
-          <Image style={styles.uploadImg} />
-          <TouchableOpacity style={styles.cameraBox}>
-            <MaterialIcons name="photo-camera" size={24} color="#BDBDBD" />
+      
+        <View style={styles.container}>
+          <View style={styles.imageBox}>
+            <Image style={styles.uploadImg} source={userImg} />
+            <TouchableOpacity
+              style={[
+                styles.cameraBox,
+                {
+                  backgroundColor: userImg
+                    ? 'rgba(255, 255, 255, 0.3)'
+                    : '#ffffff',
+                },
+              ]}
+            >
+              <MaterialIcons
+                name="photo-camera"
+                size={24}
+                color={userImg ? '#FFFFFF' : '#BDBDBD'}
+              />
+            </TouchableOpacity>
+            <Text style={styles.imageBoxText}>
+              {userImg ? 'Редагувати фото' : 'Завантажте фото'}
+            </Text>
+        </View>        
+          <Input
+            value={placeName}
+            onChangeText={setPlaceName}
+            inputStyle={styles.placeNameInput}
+            placeholder="Назва..."
+            placeholderTextColor={'#BDBDBD'}
+            inputContainerStyle={{ borderBottomColor: '#E8E8E8' }}
+            placeholderStyle={{ fontSize: 16 }}
+          />
+          <Input
+            value={location}
+            onChangeText={setLocation}
+            inputStyle={styles.locationInput}
+            placeholder="Місцевість..."
+            placeholderTextColor={'#BDBDBD'}
+            inputContainerStyle={{ borderBottomColor: '#E8E8E8' }}
+            placeholderStyle={{ fontSize: 16 }}
+            leftIcon={<Feather name="map-pin" size={20} color="#BDBDBD" />}
+          />
+          <TouchableOpacity
+            style={[
+              styles.buttonStyle,
+              {
+                backgroundColor:
+                  userImg && placeName && location ? '#FF6C00' : '#F6F6F6',
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.buttonTextStyle,
+                {
+                  color:
+                    userImg && placeName && location ? '#FFFFFF' : '#BDBDBD',
+                },
+              ]}
+            >
+              Опубліковати{' '}
+            </Text>
           </TouchableOpacity>
-          <Text style={styles.imageBoxText}>
-            {userImg ? 'Редагувати фото' : 'Завантажте фото'}
-          </Text>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity style={styles.deleteBtnBox}>
+              <Feather name="trash-2" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          </View>
         </View>
-        <Input
-          style={styles.inputStyle}
-          placeholder="Назва..."
-          placeholderTextColor={'#BDBDBD'}
-          inputContainerStyle={{ borderBottomColor: '#E8E8E8' }}
-          placeholderStyle={{ fontSize: 16 }}
-        />
-        <Input
-          style={styles.inputStyle}
-          placeholder="Місцевість..."
-          placeholderTextColor={'#BDBDBD'}
-          inputContainerStyle={{ borderBottomColor: '#E8E8E8' }}
-          placeholderStyle={{ fontSize: 16 }}
-        />
-      </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -91,7 +140,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 60,
     height: 60,
-    backgroundColor: '#ffffff',
     borderRadius: 50,
   },
 
@@ -102,10 +150,46 @@ const styles = StyleSheet.create({
     color: '#BDBDBD',
   },
 
-  inputStyle: {
+  placeNameInput: {
     paddingVertical: 15,
     fontFamily: 'RobotoMedium',
     fontSize: 16,
+    color: '#212121',
+  },
+
+  locationInput: {
+    paddingVertical: 15,
+    fontFamily: 'RobotoRegular',
+    fontSize: 16,
+    color: '#212121',
+  },
+
+  buttonStyle: {
+    display: 'flex',
+    marginHorizontal: 'auto',
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderRadius: 30,
+  },
+
+  buttonTextStyle: {
+    fontFamily: 'RobotoRegular',
+    fontSize: 16,
+  },
+
+  btnContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+
+  deleteBtnBox: {
+    width: 70,
+    height: 40,
+    backgroundColor: '#F6F6F6',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

@@ -117,10 +117,13 @@ const LoginForm = () => {
                 style={styles.buttonStyle}
                 onPress={handleSubmitForm}
               >
-                <Text style={{ color: '#FFFFFF' }}>Увійти</Text>
+                <Text style={{ color: '#FFFFFF', fontSize: 16, }}>Увійти</Text>
               </TouchableOpacity>
               <Text style={styles.toRegisterPage}>
-                Немає акаунту?<Text onPress={()=> navigation.navigate("Registration")}>Зареєструватися</Text>
+                Немає акаунту?
+                <Text onPress={() => navigation.navigate('Registration')}>
+                  Зареєструватися
+                </Text>
               </Text>
             </View>
           </View>
