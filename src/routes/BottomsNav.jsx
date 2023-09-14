@@ -18,11 +18,20 @@ return (
       tabBarIcon: ({ focused, color }) => {
         if (route.name === 'Posts') {
           return (
-            <AntDesign
-              name={'appstore-o'}
-              size={24}
-              color={focused ? '#FF6C00' : color}
-            />
+            <View
+              style={[
+                styles.addPostIcon,
+                focused
+                  ? { backgroundColor: '#FF6C00' }
+                  : { backgroundColor: 'transparent' },
+              ]}
+            >
+              <AntDesign
+                name={'appstore-o'}
+                size={24}
+                color={'rgba(33, 33, 33, 0.8)'}
+              />
+            </View>
           );
         } else if (route.name === 'CreatePost') {
           return (
@@ -31,19 +40,32 @@ return (
                 styles.addPostIcon,
                 focused
                   ? { backgroundColor: '#FF6C00' }
-                  : { backgroundColor: 'rgba(33, 33, 33, 0.8)' },
+                  : { backgroundColor: 'transparent' },
               ]}
             >
-              <AntDesign name={'plus'} size={20} color={'#FFFFFF'} />
+              <AntDesign
+                name={'plus'}
+                size={20}
+                color={'rgba(33, 33, 33, 0.8)'}
+              />
             </View>
           );
         } else if (route.name === 'Profile') {
           return (
-            <AntDesign
-              name={'user'}
-              size={24}
-              color={focused ? '#FF6C00' : color}
-            />
+            <View
+              style={[
+                styles.addPostIcon,
+                focused
+                  ? { backgroundColor: '#FF6C00' }
+                  : { backgroundColor: 'transparent' },
+              ]}
+            >
+              <AntDesign
+                name={'user'}
+                size={24}
+                color={'rgba(33, 33, 33, 0.8)'}
+              />
+            </View>
           );
         }
       },
@@ -89,7 +111,11 @@ return (
         ),
       }}
     />
-    <Tabs.Screen name="Profile" component={ProfileScreen} />
+    <Tabs.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{ headerShown: false }}
+    />
   </Tabs.Navigator>
 );
 }

@@ -8,16 +8,19 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native';
 import { MaterialIcons, Feather } from '@expo/vector-icons';
-import { Input } from '@rneui/themed';
+import { Input } from 'react-native-elements';
 
 const CreatePostsScreen = () => {
   const [fontLoader, setfontLoader] = useState(false);
   const [placeName, setPlaceName] = useState(null);
   const [location, setLocation] = useState(null);
-  const [userImg, setUserImg] = useState(require("../../assets/image/postsImg.jpg"));
+  const [userImg, setUserImg] = useState(
+    require('../../assets/image/postsImg.jpg')
+  );
 
   useEffect(() => {
     async function loadFont() {
@@ -34,32 +37,30 @@ const CreatePostsScreen = () => {
     return null;
   }
 
-  
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      
-        <View style={styles.container}>
-          <View style={styles.imageBox}>
-            <Image style={styles.uploadImg} source={userImg} />
-            <TouchableOpacity
-              style={[
-                styles.cameraBox,
-                {
-                  backgroundColor: userImg
-                    ? 'rgba(255, 255, 255, 0.3)'
-                    : '#ffffff',
-                },
-              ]}
-            >
-              <MaterialIcons
-                name="photo-camera"
-                size={24}
-                color={userImg ? '#FFFFFF' : '#BDBDBD'}
-              />
-            </TouchableOpacity>
-            <Text style={styles.imageBoxText}>
-              {userImg ? 'Редагувати фото' : 'Завантажте фото'}
-            </Text>
+      <View style={styles.container}>
+        <View style={styles.imageBox}>
+          <Image style={styles.uploadImg} source={userImg} />
+          <TouchableOpacity
+            style={[
+              styles.cameraBox,
+              {
+                backgroundColor: userImg
+                  ? 'rgba(255, 255, 255, 0.3)'
+                  : '#ffffff',
+              },
+            ]}
+          >
+            <MaterialIcons
+              name="photo-camera"
+              size={24}
+              color={userImg ? '#FFFFFF' : '#BDBDBD'}
+            />
+          </TouchableOpacity>
+          <Text style={styles.imageBoxText}>
+            {userImg ? 'Редагувати фото' : 'Завантажте фото'}
+          </Text>
         </View>        
           <Input
             value={placeName}
@@ -106,7 +107,7 @@ const CreatePostsScreen = () => {
               <Feather name="trash-2" size={24} color="#BDBDBD" />
             </TouchableOpacity>
           </View>
-        </View>
+      </View>
     </TouchableWithoutFeedback>
   );
 };
