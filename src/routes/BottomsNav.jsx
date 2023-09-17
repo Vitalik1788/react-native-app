@@ -81,6 +81,7 @@ return (
       component={PostsScreen}
       options={{
         headerTitle: 'Публікації',
+        headerTitleAlign: 'center',
         headerRightContainerStyle: { paddingRight: 16 },
         headerLeftContainerStyle: { paddingLeft: 16 },
         headerRight: () => (
@@ -98,6 +99,7 @@ return (
       component={CreatePostsScreen}
       options={{
         headerTitle: 'Створити публікацію',
+        headerTitleAlign: 'center',
         headerRightContainerStyle: { paddingRight: 16 },
         headerLeftContainerStyle: { paddingLeft: 16 },
         tabBarStyle: { display: 'none' },

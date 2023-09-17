@@ -1,9 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  SafeAreaView,
+  FlatList,
+} from 'react-native';
+
+import userImage from '../../assets/image/avatar2x.png';
+
+const POSTS = [
+  {
+    id: 1,
+    image: userImage,
+    name: 'Natali Romanova',
+    email: 'email@example.com',
+  },
+];
 
 const PostsScreen = () => {
   const [fontLoader, setfontLoader] = useState(false);
+  const [posts, setPosts] = useState(POSTS);
 
   useEffect(() => {
     async function loadFont() {
@@ -22,18 +41,21 @@ const PostsScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.userContainer}>
-        <Image
-          source={require('../../assets/image/avatar2x.png')}
-          style={styles.userPhoto}
-        />
-        <View style={styles.textContainer}>
-          <Text style={styles.nameTextStyle}>Natali Romanova</Text>
-          <Text>email@example.com</Text>
-        </View>        
-      </View>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={posts}
+        renderItem={({ item }) => (
+          <View style={styles.userContainer}>
+            <Image source={item.image} style={styles.userPhoto} />
+            <View style={styles.textContainer}>
+              <Text style={styles.nameTextStyle}>{item.name}</Text>
+              <Text>{item.email}</Text>
+            </View>
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+      />
+    </SafeAreaView>    
   );
 };
 

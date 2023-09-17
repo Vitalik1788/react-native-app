@@ -16,7 +16,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import defaultImage from '../../assets/image/default.jpg';
-import bgi from '../../assets/image/BGImage.jpg';
+import bgi from '../../assets/image/BGI2x.jpg';
 import { AntDesign } from '@expo/vector-icons';
 
 const RegistrationForm = () => {
@@ -166,9 +166,8 @@ const RegistrationForm = () => {
                   Зареєструватися
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.toLoginPage}>
-                Вже є акаунт?
-                <Text onPress={() => navigation.navigate('Login')}>Увійти</Text>
+              <Text style={styles.toLoginPage} onPress={() => navigation.navigate('Login')}>
+                Вже є акаунт? Увійти
               </Text>
             </View>
           </View>

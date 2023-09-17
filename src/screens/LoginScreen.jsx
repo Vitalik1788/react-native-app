@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import bgi from '../../assets/image/BGImage.jpg';
+import bgi from '../../assets/image/BGI2x.jpg';
 
 const LoginForm = () => {
   const [fontLoader, setfontLoader] = useState(false);
@@ -119,11 +119,8 @@ const LoginForm = () => {
               >
                 <Text style={{ color: '#FFFFFF', fontSize: 16, }}>Увійти</Text>
               </TouchableOpacity>
-              <Text style={styles.toRegisterPage}>
-                Немає акаунту?
-                <Text onPress={() => navigation.navigate('Registration')}>
-                  Зареєструватися
-                </Text>
+              <Text style={styles.toRegisterPage} onPress={() => navigation.navigate('Registration')}>
+                Немає акаунту? Зареєструватися          
               </Text>
             </View>
           </View>
