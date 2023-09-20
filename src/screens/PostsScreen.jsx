@@ -43,6 +43,7 @@ const PostsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={posts}
         renderItem={({ item }) => (
           <View style={styles.userContainer}>
@@ -53,9 +54,9 @@ const PostsScreen = () => {
             </View>
           </View>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
       />
-    </SafeAreaView>    
+    </SafeAreaView>
   );
 };
 

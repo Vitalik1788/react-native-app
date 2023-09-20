@@ -102,7 +102,8 @@ const ProfileScreen = () => {
               </View>
             </View>
             <Text style={styles.userName}>Natali Romanova</Text>
-            <FlatList
+          <FlatList
+              showsVerticalScrollIndicator={false}
               data={userPosts}
               renderItem={({ item }) => (
                 <View style={styles.cardBox}>
