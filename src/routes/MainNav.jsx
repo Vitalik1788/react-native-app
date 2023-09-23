@@ -5,15 +5,17 @@ import RegistrationForm from '../screens/RegistrationScreen';
 import LoginForm from "../screens/LoginScreen";
 
 import BottomsNav from '../routes/BottomsNav';
-import PostsScreen from '../screens/PostsScreen';
+import CommentsScreen from '../screens/CommentsScreen';
+
+import { AntDesign } from '@expo/vector-icons';
 
 const MainStack = createStackNavigator();
 
-const MainNav = () => {
 
+const MainNav = () => {
   return (
     <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Home">
+      <MainStack.Navigator initialRouteName="Comments">
         <MainStack.Screen
           name="Registration"
           component={RegistrationForm}
@@ -29,7 +31,26 @@ const MainNav = () => {
           name="Home"
           component={BottomsNav}
           options={{ headerShown: false }}
-        />        
+        />
+
+        <MainStack.Screen
+          name="Comments"
+          component={CommentsScreen}
+          options={({ navigation: { goBack } }) => ({
+            headerTitle: 'Коментарі',
+            headerTitleAlign: 'center',
+            headerRightContainerStyle: { paddingRight: 16 },
+            headerLeftContainerStyle: { paddingLeft: 16 },
+            headerLeft: () => (
+              <AntDesign
+                onPress={() => goBack()}
+                name="arrowleft"
+                size={24}
+                color="rgba(33, 33, 33, 0.8)"
+              />
+            ),
+          })}
+        />
       </MainStack.Navigator>
     </NavigationContainer>
   );

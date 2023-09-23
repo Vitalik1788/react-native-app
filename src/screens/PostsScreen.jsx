@@ -7,14 +7,17 @@ import {
   Text,
   SafeAreaView,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+
 
 
 import userImage from '../../assets/image/avatar2x.png';
 import forest from '../../assets/image/forest.jpg';
 import sea from '../../assets/image/sea.jpg';
 import italy from '../../assets/image/italy.jpg';
+import { useNavigation } from '@react-navigation/native';
 
 const POFILEPOSTS = [
   {
@@ -46,6 +49,8 @@ const POFILEPOSTS = [
 const PostsScreen = () => {
   const [fontLoader, setfontLoader] = useState(false);
   const [userPosts, setUserPosts] = useState(POFILEPOSTS);
+  const navigation = useNavigation();
+
 
   useEffect(() => {
     async function loadFont() {
@@ -80,15 +85,17 @@ const PostsScreen = () => {
             <Image style={styles.postImageStyle} source={item.image} />
             <Text style={styles.imageTitle}>{item.title}</Text>
             <View style={styles.statsContainer}>
-              <View style={[styles.postStats, { marginRight: 24 }]}>
-                <Feather
-                  style={{ marginRight: 9 }}
-                  name="message-circle"
-                  size={24}
-                  color="#FF6C00"
-                />
-                <Text>{item.comments}</Text>
-              </View>
+              <TouchableOpacity onPress={() => navigation.navigate('Comments')}>
+                <View style={[styles.postStats, { marginRight: 24 }]}>
+                  <Feather
+                    style={{ marginRight: 9 }}
+                    name="message-circle"
+                    size={24}
+                    color="#FF6C00"
+                  />
+                  <Text>{item.comments}</Text>
+                </View>
+              </TouchableOpacity>
               <View style={styles.postStats}>
                 <Feather
                   style={{ marginRight: 9 }}
