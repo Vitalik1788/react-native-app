@@ -8,6 +8,7 @@ import BottomsNav from '../routes/BottomsNav';
 import CommentsScreen from '../screens/CommentsScreen';
 
 import { AntDesign } from '@expo/vector-icons';
+import MapScreen from '../screens/MapScreen';
 
 const MainStack = createStackNavigator();
 
@@ -15,7 +16,7 @@ const MainStack = createStackNavigator();
 const MainNav = () => {
   return (
     <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Comments">
+      <MainStack.Navigator initialRouteName="Login">
         <MainStack.Screen
           name="Registration"
           component={RegistrationForm}
@@ -50,6 +51,40 @@ const MainNav = () => {
               />
             ),
           })}
+        />
+
+        <MainStack.Screen
+          name="Map"
+          component={MapScreen}
+          options={({ navigation: { goBack } }) => ({
+            headerTitle: 'Місце розташування',
+              headerTitleAlign: 'center',
+              headerRightContainerStyle: { paddingRight: 16 },
+              headerLeftContainerStyle: { paddingLeft: 16 },
+              headerLeft: () => (
+                <AntDesign
+                  onPress={() => goBack()}
+                  name="arrowleft"
+                  size={24}
+                  color="black"
+                />
+              ),
+          })}
+
+          // options={{
+          //   headerTitle: 'Місце розташування',
+          //   headerTitleAlign: 'center',
+          //   headerRightContainerStyle: { paddingRight: 16 },
+          //   headerLeftContainerStyle: { paddingLeft: 16 },
+          //   headerLeft: () => (
+          //     <AntDesign
+          //       onPress={() => navigation.navigate('Posts')}
+          //       name="arrowleft"
+          //       size={24}
+          //       color="black"
+          //     />
+          //   ),
+          // }}
         />
       </MainStack.Navigator>
     </NavigationContainer>

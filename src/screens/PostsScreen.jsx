@@ -105,15 +105,17 @@ const PostsScreen = () => {
                 />
                 <Text>{item.likes}</Text>
               </View>
-              <View style={[styles.postStats, { marginLeft: 'auto' }]}>
-                <Feather
-                  style={{ marginRight: 4 }}
-                  name="map-pin"
-                  size={24}
-                  color="#BDBDBD"
-                />
-                <Text style={styles.locationText}>{item.location}</Text>
-              </View>
+              <TouchableOpacity onPress={() => navigation.navigate("Map")} style={{ marginLeft: 'auto' }}>
+                <View style={styles.postStats}>
+                  <Feather
+                    style={{ marginRight: 4 }}
+                    name="map-pin"
+                    size={24}
+                    color="#BDBDBD"
+                  />
+                  <Text style={styles.locationText}>{item.location}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         )}

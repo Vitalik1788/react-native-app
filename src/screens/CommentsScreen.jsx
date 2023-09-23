@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
-import { StyleSheet, View, Image, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Image, Text, TextInput, TouchableOpacity } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 import forest from '../../assets/image/forest.jpg';
 
@@ -40,8 +41,16 @@ const CommentsScreen = () => {
         </View>
       </View>
       <View style={styles.inputContainer}>
-        <TextInput value={text} placeholder="Коментувати..." style={styles.inputStyle} />
-      </View>
+        <TextInput
+          value={text}
+          onChangeText={setText}
+          placeholder="Коментувати..."
+          style={styles.inputStyle}
+        />
+        <TouchableOpacity style={styles.sendButton}>
+        <AntDesign name="arrowup" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>      
     </View>
   );
 };
@@ -84,8 +93,9 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 
-  inputContainer: {    
-    marginTop: "auto",
+  inputContainer: {
+    position: "relative",
+    marginTop: 'auto',
     paddingBottom: 16,
   },
 
@@ -98,6 +108,18 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 1,
     borderColor: 'rgba(232, 232, 232, 1)',
+  },
+
+  sendButton: {
+    position: "absolute",
+    top: 10,
+    left: 340,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 34,
+    height: 34,
+    borderRadius: 50,
+    backgroundColor: '#FF6C00',
   },
 });
 
