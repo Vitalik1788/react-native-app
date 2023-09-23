@@ -5,6 +5,7 @@ import RegistrationForm from '../screens/RegistrationScreen';
 import LoginForm from "../screens/LoginScreen";
 
 import BottomsNav from '../routes/BottomsNav';
+import PostsScreen from '../screens/PostsScreen';
 
 const MainStack = createStackNavigator();
 
@@ -28,7 +29,7 @@ const MainNav = () => {
           name="Home"
           component={BottomsNav}
           options={{ headerShown: false }}
-        />
+        />        
       </MainStack.Navigator>
     </NavigationContainer>
   );
