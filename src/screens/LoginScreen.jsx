@@ -27,11 +27,16 @@ const LoginForm = () => {
 
   useEffect(() => {
     async function loadFont() {
-      await Font.loadAsync({
+      try {
+        await Font.loadAsync({
         RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
         RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
       });
       setfontLoader(true);
+      } catch (error) {
+        console.log(e
+        )
+      }      
     }
     loadFont();
   }, []);

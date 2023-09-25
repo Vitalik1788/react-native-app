@@ -11,12 +11,16 @@ const CommentsScreen = () => {
 
   useEffect(() => {
     async function loadFont() {
-      await Font.loadAsync({
+      try {
+        await Font.loadAsync({
         RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
         RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
         RobotoBold: require('../../assets/fonts/RobotoBold.ttf'),
       });
       setfontLoader(true);
+      } catch (error) {
+        console.log(error);
+      }      
     }
     loadFont();
   }, []);
@@ -85,7 +89,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     marginLeft: 16,
-    borderRadius: '6px, 0px, 6px, 6px',
+    borderTopRightRadius: 6,
+    borderBottomRightRadius: 6,
+    borderBottomLeftRadius: 6,
+
   },
 
   commentText: {

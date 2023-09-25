@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
@@ -29,33 +30,45 @@ const CreatePostsScreen = () => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [getLocation, setGetLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
 
   useEffect(() => {
     async function loadFont() {
-      await Font.loadAsync({
+      try {
+       await Font.loadAsync({
         RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
         RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
       });
-      setfontLoader(true);
+      setfontLoader(true); 
+      } catch (error) {
+        console.log(error);
+      }      
     }
     loadFont();
 
     (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
+      try {
+       const { status } = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(status === 'granted'); 
+      } catch (error) {
+        console.log(error);
+      }      
     })();
-
   }, []);
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
         return;
+      }
+      } catch (error) {
+        console.log(error);
       }      
     })();
   }, []);
@@ -72,36 +85,44 @@ const CreatePostsScreen = () => {
   }
 
   const takeGalleryPhoto = async () => {
-    const result = await launchImageLibraryAsync(
-      (options = { mediaType: 'photo' })
-    );
-    const photoPath = result.assets[0].uri;
-    if (photoPath) setUserImg(photoPath);
+    try {
+      const result = await launchImageLibraryAsync(
+        (options = { mediaType: 'photo' })
+      );
+      const photoPath = result.assets[0].uri;
+      if (photoPath) setUserImg(photoPath);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmit = async () => {
-    const post = {
-      image: userImg,
-      placeName,
-      location,
-    };
+    try {
+      const post = {
+        image: userImg,
+        placeName,
+        location,
+      };
+      let { coords } = await Location.getCurrentPositionAsync({});
 
-    let { coords } = await Location.getCurrentPositionAsync({});
-    
-    setGetLocation(coords);
-    
-    setUserImg('');
-    setPlaceName('');
-    setLocation('');
+      console.log(coords);
+      setGetLocation(coords);
 
-    navigation.navigate('Posts');
+      setUserImg('');
+      setPlaceName('');
+      setLocation('');
+
+      navigation.navigate('Posts');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const clearPostForm = () => {
     setUserImg('');
     setPlaceName('');
     setLocation('');
-  }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -126,25 +147,35 @@ const CreatePostsScreen = () => {
           <Camera style={styles.imageBox} type={type} ref={setCameraRef}>
             <View style={styles.uploadImg}>
               <TouchableOpacity
-                onPress={async () => {
+                disabled={isLoading}
+                  onPress={async () => {
+                  try {
+                    setIsLoading(true);
                   if (cameraRef) {
                     const { uri } = await cameraRef.takePictureAsync();
                     await MediaLibrary.createAssetAsync(uri);
                     setUserImg(uri);
+                    setIsLoading(false);
                   }
+                  } catch (error) {
+                    console.log(error);
+                  }                  
                 }}
                 style={[styles.cameraBox, { backgroundColor: '#ffffff' }]}
               >
-                <MaterialIcons
-                  name="photo-camera"
-                  size={24}
-                  color={'#BDBDBD'}
-                />
+                {isLoading ? (
+                  <ActivityIndicator size={'large'} color={'blue'} />
+                ) : (
+                  <MaterialIcons
+                    name="photo-camera"
+                    size={24}
+                    color={'#BDBDBD'}
+                  />
+                )}
               </TouchableOpacity>
             </View>
           </Camera>
         )}
-
         <Text style={styles.imageBoxText}>
           {userImg ? (
             <Text onPress={() => setUserImg(null)}>Редагувати фото</Text>

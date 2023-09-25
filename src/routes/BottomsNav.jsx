@@ -80,6 +80,7 @@ return (
       name="Posts"
       component={PostsScreen}
       options={{
+        unmountOnBlur: true,
         headerTitle: 'Публікації',
         headerTitleAlign: 'center',
         headerRightContainerStyle: { paddingRight: 16 },
@@ -98,6 +99,7 @@ return (
       name="CreatePost"
       component={CreatePostsScreen}
       options={{
+        unmountOnBlur: true,
         headerTitle: 'Створити публікацію',
         headerTitleAlign: 'center',
         headerRightContainerStyle: { paddingRight: 16 },
@@ -116,7 +118,7 @@ return (
     <Tabs.Screen
       name="Profile"
       component={ProfileScreen}
-      options={{ headerShown: false }}
+      options={{ headerShown: false, unmountOnBlur: true }}
     />
   </Tabs.Navigator>
 );
