@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
 
   inputStyle: {
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: '500',
     paddingLeft: 16,
     paddingVertical: 16,
     backgroundColor: 'rgba(246, 246, 246, 1)',

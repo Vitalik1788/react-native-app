@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import * as Font from 'expo-font';
+import React, { useState } from 'react';
 import {
   View,
   TextInput,
@@ -20,7 +19,6 @@ import bgi from '../../assets/image/BGI2x.jpg';
 import { AntDesign } from '@expo/vector-icons';
 
 const RegistrationForm = () => {
-  const [fontLoader, setfontLoader] = useState(false);
   const [activeInput, setActiveInput] = useState('');
   const [userAvatar, setUserAvatar] = useState(null);
   const [securePassword, setSecurePassword] = useState(true);
@@ -29,25 +27,6 @@ const RegistrationForm = () => {
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    async function loadFont() {
-      try {
-        await Font.loadAsync({
-        RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
-        RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
-      });
-      setfontLoader(true);
-      } catch (error) {
-        console.log(error);
-      }      
-    }
-    loadFont();
-  }, []);
-
-  if (!fontLoader) {
-    return null;
-  }
 
   const handleSubmitForm = () => {
     if (!login || !email || !password)

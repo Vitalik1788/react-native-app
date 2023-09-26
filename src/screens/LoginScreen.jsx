@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import * as Font from 'expo-font';
+import React, { useState } from 'react';
 import {
   ImageBackground,
   Keyboard,
@@ -16,34 +15,12 @@ import { useNavigation } from '@react-navigation/native';
 import bgi from '../../assets/image/BGI2x.jpg';
 
 const LoginForm = () => {
-  const [fontLoader, setfontLoader] = useState(false);
   const [activeInput, setActiveInput] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation();
-
-
-  useEffect(() => {
-    async function loadFont() {
-      try {
-        await Font.loadAsync({
-        RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
-        RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
-      });
-      setfontLoader(true);
-      } catch (error) {
-        console.log(e
-        )
-      }      
-    }
-    loadFont();
-  }, []);
-
-  if (!fontLoader) {
-    return null;
-  }
+  const navigation = useNavigation();  
 
   const handleSubmitForm = () => {
     if (!email || !password)

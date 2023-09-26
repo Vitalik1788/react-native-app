@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import * as Font from 'expo-font';
 import {
   View,
   StyleSheet,
@@ -21,7 +20,6 @@ import { launchImageLibraryAsync } from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 
 const CreatePostsScreen = () => {
-  const [fontLoader, setfontLoader] = useState(false);
   const [placeName, setPlaceName] = useState(null);
   const [location, setLocation] = useState(null);
   const [userImg, setUserImg] = useState(null);
@@ -35,41 +33,26 @@ const CreatePostsScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    async function loadFont() {
-      try {
-       await Font.loadAsync({
-        RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
-        RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
-      });
-      setfontLoader(true); 
-      } catch (error) {
-        console.log(error);
-      }      
-    }
-    loadFont();
-
     (async () => {
       try {
-       const { status } = await Camera.requestCameraPermissionsAsync();
-      await MediaLibrary.requestPermissionsAsync();
-      setHasPermission(status === 'granted'); 
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        await MediaLibrary.requestPermissionsAsync();
+        setHasPermission(status === 'granted');
       } catch (error) {
         console.log(error);
-      }      
+      }
     })();
-  }, []);
 
-  useEffect(() => {
     (async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+          return;
+        }
       } catch (error) {
         console.log(error);
-      }      
+      }
     })();
   }, []);
 
@@ -78,10 +61,6 @@ const CreatePostsScreen = () => {
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
-  }
-
-  if (!fontLoader) {
-    return null;
   }
 
   const takeGalleryPhoto = async () => {
@@ -148,18 +127,18 @@ const CreatePostsScreen = () => {
             <View style={styles.uploadImg}>
               <TouchableOpacity
                 disabled={isLoading}
-                  onPress={async () => {
+                onPress={async () => {
                   try {
                     setIsLoading(true);
-                  if (cameraRef) {
-                    const { uri } = await cameraRef.takePictureAsync();
-                    await MediaLibrary.createAssetAsync(uri);
-                    setUserImg(uri);
-                    setIsLoading(false);
-                  }
+                    if (cameraRef) {
+                      const { uri } = await cameraRef.takePictureAsync();
+                      await MediaLibrary.createAssetAsync(uri);
+                      setUserImg(uri);
+                      setIsLoading(false);
+                    }
                   } catch (error) {
                     console.log(error);
-                  }                  
+                  }
                 }}
                 style={[styles.cameraBox, { backgroundColor: '#ffffff' }]}
               >

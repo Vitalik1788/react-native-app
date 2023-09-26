@@ -8,8 +8,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import * as Font from 'expo-font';
+import React, { useState } from 'react';
 
 import { AntDesign, Feather } from '@expo/vector-icons';
 
@@ -46,30 +45,10 @@ const POFILEPOSTS = [
 ];
 
 const ProfileScreen = () => {
-  const [fontLoader, setfontLoader] = useState(false);
   const [userAvatar, setUserAvatar] = useState(true);
   const [userPosts, setUserPosts] = useState(POFILEPOSTS);
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    async function loadFont() {
-      try {
-        await Font.loadAsync({
-        RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
-        RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
-      });
-      setfontLoader(true);
-      } catch (error) {
-        console.log(error)
-      }      
-    }
-    loadFont();
-  }, []);
-
-  if (!fontLoader) {
-    return null;
-  }
 
   return (
     <SafeAreaView style={styles.container}>
