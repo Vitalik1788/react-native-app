@@ -11,28 +11,49 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
 import bgi from '../../assets/image/BGI2x.jpg';
 
 const LoginForm = () => {
   const [activeInput, setActiveInput] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [inputs, setInputs] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState({}); 
 
   const navigation = useNavigation();  
 
-  const handleSubmitForm = () => {
-    if (!email || !password)
-      return console.warn('Будь-ласка заповніть всі поля');
-    const user = {
-      email,
-      password,
-    };
-    console.log(user);
+  const handleOnChange = (text, input) => {
+    setInputs(prevState => ({ ...prevState, [input]: text }));
+  };
 
-    setEmail('');
-    setPassword('');
+  const handleError = (errorMessage, input) => {
+    setErrors(prevState => ({ ...prevState, [input]: errorMessage }));
+  };
+
+
+  const handleSubmitForm = () => { 
+    
+    if (!inputs.email) {
+      handleError('Будь ласка вкажіть email', 'email');
+      return;
+    } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
+      handleError('Неправильна адреса електронної пошти', 'email');
+      return;
+    }
+
+    if (!inputs.password) {
+      handleError('Будь ласка вкажіть пароль', 'password');
+      return;
+    } else if (inputs.password.length < 5) {
+      handleError('Мінімальна довжина паролю 5 символів', 'password');
+      return;
+    }
+    
+    const user = {
+      email: inputs.email,
+      password: inputs.password,
+    };    
+
+    setInputs({ email: '', password: '' });
 
     navigation.navigate('Home');
 
@@ -53,27 +74,35 @@ const LoginForm = () => {
           <View style={styles.formContainer}>
             <Text style={styles.screenTitle}>Увійти</Text>
             <View>
-              <TextInput
-                autoCorrect={false}
-                autoComplete="off"
-                onFocus={() => setActiveInput('email')}
-                onBlur={() => setActiveInput('')}
-                onChangeText={setEmail}
-                value={email}
-                style={[
-                  styles.inputStyle,
-                  activeInput === 'email' && styles.isActiveInput,
-                ]}
-                type="email"
-                name="email"
-                placeholder="Адреса електронної пошти"
-              />
+              <View style={{marginBottom:11}}>
+                <TextInput
+                  textContentType="emailAddress"
+                  autoCorrect={false}
+                  autoComplete="off"
+                  onFocus={() => {
+                    setActiveInput('email'), handleError(null, 'email');
+                  }}
+                  onBlur={() => setActiveInput('')}
+                  onChangeText={text => handleOnChange(text, 'email')}
+                  value={inputs.email}
+                  style={[
+                    styles.inputStyle,
+                    activeInput === 'email' && styles.isActiveInput,
+                  ]}
+                  placeholder="Адреса електронної пошти"
+                />
+                {errors && <Text style={{ color: 'red' }}>{errors.email}</Text>}
+              </View>
+
               <View style={styles.passwordInput}>
                 <TextInput
-                  onFocus={() => setActiveInput('password')}
+                  textContentType="password"
+                  onFocus={() => {
+                    setActiveInput('password'), handleError(null, 'password');
+                  }}
                   onBlur={() => setActiveInput('')}
-                  onChangeText={setPassword}
-                  value={password}
+                  onChangeText={text => handleOnChange(text, 'password')}
+                  value={inputs.password}
                   style={[
                     styles.inputStyle,
                     activeInput === 'password' && styles.isActiveInput,
@@ -82,10 +111,11 @@ const LoginForm = () => {
                   autoCorrect={false}
                   autoComplete="off"
                   secureTextEntry={securePassword && true}
-                  type="password"
-                  name="password"
                   placeholder="Пароль"
                 />
+                {errors && (
+                  <Text style={{ color: 'red' }}>{errors.password}</Text>
+                )}
                 <TouchableOpacity
                   style={styles.buttonShowPassword}
                   onPress={() => setSecurePassword(prev => !prev)}
@@ -99,10 +129,13 @@ const LoginForm = () => {
                 style={styles.buttonStyle}
                 onPress={handleSubmitForm}
               >
-                <Text style={{ color: '#FFFFFF', fontSize: 16, }}>Увійти</Text>
+                <Text style={{ color: '#FFFFFF', fontSize: 16 }}>Увійти</Text>
               </TouchableOpacity>
-              <Text style={styles.toRegisterPage} onPress={() => navigation.navigate('Registration')}>
-                Немає акаунту? Зареєструватися          
+              <Text
+                style={styles.toRegisterPage}
+                onPress={() => navigation.navigate('Registration')}
+              >
+                Немає акаунту? Зареєструватися
               </Text>
             </View>
           </View>
@@ -142,7 +175,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     paddingVertical: 16,
-    marginBottom: 16,
+    marginBottom: 5,
     backgroundColor: '#F6F6F6',
     borderColor: '#E8E8E8',
     borderWidth: 1,
