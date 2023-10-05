@@ -9,13 +9,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, { useState } from 'react';
+import { launchImageLibraryAsync } from 'expo-image-picker';
 
 import { AntDesign, Feather } from '@expo/vector-icons';
 
 import forest from '../../assets/image/forest.jpg';
 import sea from '../../assets/image/sea.jpg';
 import italy from '../../assets/image/italy.jpg';
+import defaultImage from '../../assets/image/default.jpg';
+
+
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAvatar, selectLogin } from '../redux/auth/authSelectors';
+import { logout, updateUser } from '../redux/auth/authOperation';
+import { auth } from '../firebase/config';
 
 const POFILEPOSTS = [
   {
@@ -45,10 +53,30 @@ const POFILEPOSTS = [
 ];
 
 const ProfileScreen = () => {
-  const [userAvatar, setUserAvatar] = useState(true);
   const [userPosts, setUserPosts] = useState(POFILEPOSTS);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const avatar = useSelector(selectAvatar);
+  const login = useSelector(selectLogin);
+
+  const logoutUser = () => {
+    dispatch(logout());
+    navigation.navigate('Login');
+  };  
+
+  const takeGalleryPhoto = async () => {
+    try {
+      const result = await launchImageLibraryAsync(
+        (options = { mediaType: 'photo' })
+      );
+      const photoPath = result.assets[0].uri;
+      if (photoPath) {dispatch(updateUser(photoPath))}
+    } catch (error) {
+      alert(error);
+    }    
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,19 +88,21 @@ const ProfileScreen = () => {
         <View style={styles.formContainer}>
           <View style={styles.avatarContainer}>
             <Image
-              source={require('../../assets/image/avatar2x.png')}
+              source={avatar ? { uri: avatar } : defaultImage}
               style={styles.imageStyle}
             />
             <View>
-              {!userAvatar ? (
+              {!avatar ? (
                 <AntDesign
+                  onPress={takeGalleryPhoto}
                   name="pluscircleo"
                   size={25}
                   color="#FF6C00"
                   style={styles.avatarAddButton}
                 />
               ) : (
-                <AntDesign
+                  <AntDesign
+                  onPress={() => dispatch(updateUser(""))}
                   name="closecircleo"
                   size={25}
                   color="#E8E8E8"
@@ -81,6 +111,7 @@ const ProfileScreen = () => {
                 />
               )}
               <Feather
+                onPress={logoutUser}
                 style={styles.exitButton}
                 name="log-out"
                 size={24}
@@ -88,7 +119,7 @@ const ProfileScreen = () => {
               />
             </View>
           </View>
-          <Text style={styles.userName}>Natali Romanova</Text>
+          <Text style={styles.userName}>{login}</Text>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={userPosts}
@@ -119,7 +150,10 @@ const ProfileScreen = () => {
                     />
                     <Text>{item.likes}</Text>
                   </View>
-                  <TouchableOpacity onPress={()=> navigation.navigate('Map')} style={{ marginLeft: 'auto' }}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Map')}
+                    style={{ marginLeft: 'auto' }}
+                  >
                     <View style={styles.postStats}>
                       <Feather
                         style={{ marginRight: 4 }}

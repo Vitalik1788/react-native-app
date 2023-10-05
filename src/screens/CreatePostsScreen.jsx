@@ -18,6 +18,9 @@ import { MaterialIcons, Feather } from '@expo/vector-icons';
 import { Input } from 'react-native-elements';
 import { launchImageLibraryAsync } from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserId } from '../redux/auth/authSelectors';
+import { addPost } from '../redux/posts/postsOperation';
 
 const CreatePostsScreen = () => {
   const [placeName, setPlaceName] = useState(null);
@@ -29,8 +32,11 @@ const CreatePostsScreen = () => {
   const [getLocation, setGetLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [convertCoordinate, setConvertCoordinate] = useState(null);
 
   const navigation = useNavigation();
+  const userId = useSelector(selectUserId);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -39,7 +45,7 @@ const CreatePostsScreen = () => {
         await MediaLibrary.requestPermissionsAsync();
         setHasPermission(status === 'granted');
       } catch (error) {
-        console.log(error);
+        alert(error);
       }
     })();
 
@@ -51,7 +57,7 @@ const CreatePostsScreen = () => {
           return;
         }
       } catch (error) {
-        console.log(error);
+        alert(error);
       }
     })();
   }, []);
@@ -71,21 +77,30 @@ const CreatePostsScreen = () => {
       const photoPath = result.assets[0].uri;
       if (photoPath) setUserImg(photoPath);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
   const handleSubmit = async () => {
     try {
+      let { coords } = await Location.getCurrentPositionAsync({});
+      setGetLocation(coords);
+      const address = await Location.reverseGeocodeAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+      const { region, country } = address[0];
+
       const post = {
-        image: userImg,
+        postImage: userImg,
         placeName,
         location,
+        region,
+        country,
+        userId,
       };
-      let { coords } = await Location.getCurrentPositionAsync({});
 
-      console.log(coords);
-      setGetLocation(coords);
+      dispatch(addPost(post));
 
       setUserImg('');
       setPlaceName('');
@@ -93,7 +108,7 @@ const CreatePostsScreen = () => {
 
       navigation.navigate('Posts');
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
@@ -137,7 +152,7 @@ const CreatePostsScreen = () => {
                       setIsLoading(false);
                     }
                   } catch (error) {
-                    console.log(error);
+                    alert(error);
                   }
                 }}
                 style={[styles.cameraBox, { backgroundColor: '#ffffff' }]}

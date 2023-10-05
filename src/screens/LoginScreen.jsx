@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import bgi from '../../assets/image/BGI2x.jpg';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/auth/authOperation';
 
 const LoginForm = () => {
   const [activeInput, setActiveInput] = useState('');
@@ -20,6 +22,7 @@ const LoginForm = () => {
   const [errors, setErrors] = useState({}); 
 
   const navigation = useNavigation();  
+  const dispatch = useDispatch();
 
   const handleOnChange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
@@ -29,8 +32,7 @@ const LoginForm = () => {
     setErrors(prevState => ({ ...prevState, [input]: errorMessage }));
   };
 
-
-  const handleSubmitForm = () => { 
+  const handleSubmitForm = async () => { 
     
     if (!inputs.email) {
       handleError('Будь ласка вкажіть email', 'email');
@@ -48,11 +50,10 @@ const LoginForm = () => {
       return;
     }
     
-    const user = {
-      email: inputs.email,
-      password: inputs.password,
-    };    
+    const { email, password } = inputs;
 
+    dispatch(login({ email, password }));
+    
     setInputs({ email: '', password: '' });
 
     navigation.navigate('Home');

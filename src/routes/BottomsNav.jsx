@@ -6,11 +6,19 @@ import { useNavigation } from '@react-navigation/native';
 import PostsScreen from "../screens/PostsScreen";
 import CreatePostsScreen from "../screens/CreatePostsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/auth/authOperation";
 
 const Tabs = createBottomTabNavigator();
 
 const BottomsNav = () => {
-const navigation = useNavigation();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  
+  const logoutUser = () => {
+    dispatch(logout());
+    navigation.navigate('Login');
+  }
 
 return (
   <Tabs.Navigator
@@ -87,7 +95,7 @@ return (
         headerLeftContainerStyle: { paddingLeft: 16 },
         headerRight: () => (
           <MaterialCommunityIcons
-            onPress={() => navigation.navigate('Login')}
+            onPress={logoutUser}
             name="logout"
             size={24}
             color="#BDBDBD"

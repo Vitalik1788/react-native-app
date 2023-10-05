@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,62 +10,51 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
+import defaultImage from '../../assets/image/default.jpg';
 
-
-import userImage from '../../assets/image/avatar2x.png';
 import forest from '../../assets/image/forest.jpg';
 import sea from '../../assets/image/sea.jpg';
 import italy from '../../assets/image/italy.jpg';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAvatar, selectEmail, selectLogin } from '../redux/auth/authSelectors';
+import { getUserPosts } from '../redux/posts/postsOperation';
+import { selectPosts } from '../redux/posts/postsSelectors';
 
-const POFILEPOSTS = [
-  {
-    id: 1,
-    image: forest,
-    title: 'Ліс',
-    comments: 8,
-    likes: 153,
-    location: 'Ukraine',
-  },
-  {
-    id: 2,
-    image: sea,
-    title: 'Захід на Чорному морі',
-    comments: 3,
-    likes: 200,
-    location: 'Ukraine',
-  },
-  {
-    id: 3,
-    image: italy,
-    title: 'Старий будиночок у Венеції',
-    comments: 50,
-    likes: 200,
-    location: 'Italy',
-  },
-];
 
 const PostsScreen = () => {
-  const [userPosts, setUserPosts] = useState(POFILEPOSTS);
+  // const [userPosts, setUserPosts] = useState(POFILEPOSTS);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getUserPosts());
+  }, [dispatch]);
+
+  const avatar = useSelector(selectAvatar);
+  const login = useSelector(selectLogin);
+  const email = useSelector(selectEmail);
+  const posts = useSelector(selectPosts); 
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userContainer}>
-        <Image source={userImage} style={styles.userPhoto} />
+        <Image
+          source={avatar ? { uri: avatar } : defaultImage}
+          style={styles.userPhoto}
+        />
         <View style={styles.textContainer}>
-          <Text style={styles.nameTextStyle}>Natali Romanova</Text>
-          <Text>email@example.com</Text>
+          <Text style={styles.nameTextStyle}>{login}</Text>
+          <Text>{email}</Text>
         </View>
       </View>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={userPosts}
+        data={posts}
         renderItem={({ item }) => (
           <View style={styles.cardBox}>
-            <Image style={styles.postImageStyle} source={item.image} />
-            <Text style={styles.imageTitle}>{item.title}</Text>
+            <Image style={styles.postImageStyle} source={item && { uri: item.postImage }} />
+            <Text style={styles.imageTitle}>{item.placeName}</Text>
             <View style={styles.statsContainer}>
               <TouchableOpacity onPress={() => navigation.navigate('Comments')}>
                 <View style={[styles.postStats, { marginRight: 24 }]}>
@@ -87,7 +76,10 @@ const PostsScreen = () => {
                 />
                 <Text>{item.likes}</Text>
               </View>
-              <TouchableOpacity onPress={() => navigation.navigate("Map")} style={{ marginLeft: 'auto' }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Map')}
+                style={{ marginLeft: 'auto' }}
+              >
                 <View style={styles.postStats}>
                   <Feather
                     style={{ marginRight: 4 }}
@@ -95,7 +87,7 @@ const PostsScreen = () => {
                     size={24}
                     color="#BDBDBD"
                   />
-                  <Text style={styles.locationText}>{item.location}</Text>
+                  <Text style={styles.locationText}>{item.region}, {item.country}</Text>
                 </View>
               </TouchableOpacity>
             </View>

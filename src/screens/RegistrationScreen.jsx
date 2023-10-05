@@ -13,39 +13,53 @@ import {
   Keyboard,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { launchImageLibraryAsync } from 'expo-image-picker';
 
 import defaultImage from '../../assets/image/default.jpg';
 import bgi from '../../assets/image/BGI2x.jpg';
 import { AntDesign } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { register } from '../redux/auth/authOperation';
+
 
 const RegistrationForm = () => {
   const [activeInput, setActiveInput] = useState('');
   const [userAvatar, setUserAvatar] = useState(null);
   const [securePassword, setSecurePassword] = useState(true);
   const [inputs, setInputs] = useState({
-    login: "",
-    email: "",
-    password: "",
+    login: '',
+    email: '',
+    password: '',
   });
   const [errors, setErrors] = useState({});
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
+  const takeGalleryPhoto = async () => {
+    try {
+      const result = await launchImageLibraryAsync(
+        (options = { mediaType: 'photo' })
+      );
+      const photoPath = result.assets[0].uri;
+
+      if (photoPath) setUserAvatar(photoPath);
+    } catch (error) {
+      alert(error);
+    }
+  };  
   
   const handleOnChange = (text, input) => {
-    setInputs((prevState) => ({...prevState, [input]: text}))
-  }
-
-  const handleError = (errorMessage, input) => {
-    setErrors((prevState) => ({...prevState, [input]: errorMessage}));
+    setInputs(prevState => ({ ...prevState, [input]: text }));
   };
 
-  
+  const handleError = (errorMessage, input) => {
+    setErrors(prevState => ({ ...prevState, [input]: errorMessage }));
+  };
 
   const handleSubmitForm = () => {
-
     if (!inputs.login) {
-      handleError("Будь ласка вкажіть Логін", 'login');
+      handleError('Будь ласка вкажіть Логін', 'login');
       return;
     } else if (inputs.login.length <= 2) {
       handleError('Логін має містити більше 2х символів', 'login');
@@ -68,18 +82,15 @@ const RegistrationForm = () => {
       return;
     }
 
-  
-    const user = {
-      login: inputs.login,
-      email: inputs.email,
-      password: inputs.password
-    };
+    const { login, email, password } = inputs;
+    const photo = userAvatar;
+
+    dispatch(register({ login, email, password, photo }));
 
     setInputs({ login: '', email: '', password: '' });
-    
-    navigation.navigate('Home');
-  };  
 
+    navigation.navigate('Home');
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -103,6 +114,7 @@ const RegistrationForm = () => {
                 {!userAvatar ? (
                   <TouchableOpacity>
                     <AntDesign
+                      onPress={takeGalleryPhoto}
                       name="pluscircleo"
                       size={25}
                       color="#FF6C00"
@@ -110,8 +122,9 @@ const RegistrationForm = () => {
                     />
                   </TouchableOpacity>
                 ) : (
-                  <TouchableOpacity onPress={() => setUserAvatar(null)}>
+                  <TouchableOpacity>
                     <AntDesign
+                      onPress={() => setUserAvatar(null)}
                       name="closecircleo"
                       size={24}
                       color="#BDBDBD"
@@ -129,8 +142,7 @@ const RegistrationForm = () => {
                   autoCorrect={false}
                   autoComplete="off"
                   onFocus={() => {
-                    setActiveInput('login'),
-                    handleError(null, 'login')
+                    setActiveInput('login'), handleError(null, 'login');
                   }}
                   onBlur={() => setActiveInput('')}
                   onChangeText={text => handleOnChange(text, 'login')}
@@ -141,9 +153,7 @@ const RegistrationForm = () => {
                   ]}
                   placeholder="Логін"
                 />
-                {errors && (
-                  <Text style={{ color: 'red' }}>{errors.login}</Text>
-                )}
+                {errors && <Text style={{ color: 'red' }}>{errors.login}</Text>}
               </View>
 
               <View style={{ marginBottom: 11 }}>
@@ -151,7 +161,9 @@ const RegistrationForm = () => {
                   textContentType="emailAddress"
                   autoCorrect={false}
                   autoComplete="off"
-                  onFocus={() => { setActiveInput('email'), handleError(null, 'email') }}
+                  onFocus={() => {
+                    setActiveInput('email'), handleError(null, 'email');
+                  }}
                   onBlur={() => setActiveInput('')}
                   onChangeText={text => handleOnChange(text, 'email')}
                   value={inputs.email}
@@ -161,15 +173,15 @@ const RegistrationForm = () => {
                   ]}
                   placeholder="Адреса електронної пошти"
                 />
-                {errors && (
-                  <Text style={{ color: 'red' }}>{errors.email}</Text>
-                )}
+                {errors && <Text style={{ color: 'red' }}>{errors.email}</Text>}
               </View>
 
               <View style={styles.passwordInput}>
                 <TextInput
                   textContentType="password"
-                  onFocus={() => { setActiveInput('password'), handleError(null, 'password')}}
+                  onFocus={() => {
+                    setActiveInput('password'), handleError(null, 'password');
+                  }}
                   onBlur={() => setActiveInput('')}
                   onChangeText={text => handleOnChange(text, 'password')}
                   value={inputs.password}

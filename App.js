@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/es/integration/react';
+import store from './src/redux/store';
+
 import MainNav from './src/routes/MainNav';
+import { ActivityIndicator } from 'react-native';
 
 export default function App() {
   const [fontLoader, setfontLoader] = useState(false);
@@ -25,5 +30,14 @@ export default function App() {
     return null;
   }
 
-  return <MainNav />;
+  return (
+    <Provider store={store.store}>
+      <PersistGate
+        persistor={store.persistor}
+        loading={<ActivityIndicator size={"large"} color={"dark blue"}/>}
+      >
+        <MainNav />
+      </PersistGate>
+    </Provider>
+  );
 }
