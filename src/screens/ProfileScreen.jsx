@@ -8,58 +8,31 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { launchImageLibraryAsync } from 'expo-image-picker';
 
 import { AntDesign, Feather } from '@expo/vector-icons';
-
-import forest from '../../assets/image/forest.jpg';
-import sea from '../../assets/image/sea.jpg';
-import italy from '../../assets/image/italy.jpg';
 import defaultImage from '../../assets/image/default.jpg';
-
 
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAvatar, selectLogin } from '../redux/auth/authSelectors';
 import { logout, updateUser } from '../redux/auth/authOperation';
-import { auth } from '../firebase/config';
-
-const POFILEPOSTS = [
-  {
-    id: 1,
-    image: forest,
-    title: 'Ліс',
-    comments: 8,
-    likes: 153,
-    location: 'Ukraine',
-  },
-  {
-    id: 2,
-    image: sea,
-    title: 'Захід на Чорному морі',
-    comments: 3,
-    likes: 200,
-    location: 'Ukraine',
-  },
-  {
-    id: 3,
-    image: italy,
-    title: 'Старий будиночок у Венеції',
-    comments: 50,
-    likes: 200,
-    location: 'Italy',
-  },
-];
+import { getUserPosts } from '../redux/posts/postsOperation';
+import { selectPosts } from '../redux/posts/postsSelectors';
 
 const ProfileScreen = () => {
-  const [userPosts, setUserPosts] = useState(POFILEPOSTS);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getUserPosts());
+  }, [dispatch]);
+
   const avatar = useSelector(selectAvatar);
   const login = useSelector(selectLogin);
+  const posts = useSelector(selectPosts);
 
   const logoutUser = () => {
     dispatch(logout());
@@ -101,8 +74,8 @@ const ProfileScreen = () => {
                   style={styles.avatarAddButton}
                 />
               ) : (
-                  <AntDesign
-                  onPress={() => dispatch(updateUser(""))}
+                <AntDesign
+                  onPress={() => dispatch(updateUser(''))}
                   name="closecircleo"
                   size={25}
                   color="#E8E8E8"
@@ -122,11 +95,14 @@ const ProfileScreen = () => {
           <Text style={styles.userName}>{login}</Text>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={userPosts}
+            data={posts}
             renderItem={({ item }) => (
               <View style={styles.cardBox}>
-                <Image style={styles.postImageStyle} source={item.image} />
-                <Text style={styles.imageTitle}>{item.title}</Text>
+                <Image
+                  style={styles.postImageStyle}
+                  source={item && { uri: item.postImage }}
+                />
+                <Text style={styles.imageTitle}>{item.placeName}</Text>
                 <View style={styles.statsContainer}>
                   <TouchableOpacity
                     onPress={() => navigation.navigate('Comments')}
@@ -161,7 +137,9 @@ const ProfileScreen = () => {
                         size={24}
                         color="#BDBDBD"
                       />
-                      <Text style={styles.locationText}>{item.location}</Text>
+                      <Text style={styles.locationText}>
+                        {item.region}, {item.country}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 </View>

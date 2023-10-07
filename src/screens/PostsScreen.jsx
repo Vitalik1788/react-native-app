@@ -12,9 +12,6 @@ import { Feather } from '@expo/vector-icons';
 
 import defaultImage from '../../assets/image/default.jpg';
 
-import forest from '../../assets/image/forest.jpg';
-import sea from '../../assets/image/sea.jpg';
-import italy from '../../assets/image/italy.jpg';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAvatar, selectEmail, selectLogin } from '../redux/auth/authSelectors';
@@ -23,7 +20,6 @@ import { selectPosts } from '../redux/posts/postsSelectors';
 
 
 const PostsScreen = () => {
-  // const [userPosts, setUserPosts] = useState(POFILEPOSTS);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -53,10 +49,17 @@ const PostsScreen = () => {
         data={posts}
         renderItem={({ item }) => (
           <View style={styles.cardBox}>
-            <Image style={styles.postImageStyle} source={item && { uri: item.postImage }} />
+            <Image
+              style={styles.postImageStyle}
+              source={item && { uri: item.postImage }}
+            />
             <Text style={styles.imageTitle}>{item.placeName}</Text>
             <View style={styles.statsContainer}>
-              <TouchableOpacity onPress={() => navigation.navigate('Comments')}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Comments', { photo: item.postImage })
+                }
+              >
                 <View style={[styles.postStats, { marginRight: 24 }]}>
                   <Feather
                     style={{ marginRight: 9 }}
@@ -87,7 +90,11 @@ const PostsScreen = () => {
                     size={24}
                     color="#BDBDBD"
                   />
-                  <Text style={styles.locationText}>{item.region}, {item.country}</Text>
+                  <Text style={styles.locationText}>
+                    {item.location
+                      ? item.location
+                      : [item.region, item.country].join(', ')}
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>

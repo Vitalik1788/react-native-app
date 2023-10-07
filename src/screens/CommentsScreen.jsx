@@ -1,49 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import * as Font from 'expo-font';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-import forest from '../../assets/image/forest.jpg';
+import { useRoute } from '@react-navigation/native';
+import { FlatList } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectComments } from '../redux/posts/postsSelectors';
+import { selectAvatar, selectUserId } from '../redux/auth/authSelectors';
+import { addComment, getComments } from '../redux/posts/commentsOperation';
 
 const CommentsScreen = () => {
-  const [fontLoader, setfontLoader] = useState(false);
   const [text, setText] = useState(null);
+  const { params: { photo } } = useRoute();
+  const comments = useSelector(selectComments);
+  const avatar = useSelector(selectAvatar);
+  const userId = useSelector(selectUserId);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    async function loadFont() {
-      try {
-        await Font.loadAsync({
-        RobotoMedium: require('../../assets/fonts/RobotoMedium.ttf'),
-        RobotoRegular: require('../../assets/fonts/RobotoRegular.ttf'),
-        RobotoBold: require('../../assets/fonts/RobotoBold.ttf'),
-      });
-      setfontLoader(true);
-      } catch (error) {
-        console.log(error);
-      }      
+    dispatch(getComments());
+  }, [dispatch]);
+
+  const handleSubmit = () => {
+    if (!text) {
+      alert("Коментар до фото відсутній")
+      return
     }
-    loadFont();
-  }, []);
 
-  if (!fontLoader) {
-    return null;
+    const comment = {
+      text,
+      avatar,
+      userId,
+    }
+    dispatch(addComment(comment));
+    setText("");
   }
-
+  
   return (
     <View style={styles.container}>
-      <Image source={forest} style={styles.postImageStyle} />
-      <View style={styles.postBox}>
-        <Image
-          style={styles.commentUserImage}
-          source={require('../../assets/image/commentUserImage.jpg')}
-        />
-        <View style={styles.commentTextBox}>
-          <Text style={styles.commentText}>
-            Really love your most recent photo. I’ve been trying to capture the
-            same thing for a few months and would love some tips!
-          </Text>
-        </View>
-      </View>
+      <Image source={{ uri: photo }} style={styles.postImageStyle} />
+      <FlatList
+        
+        ListEmptyComponent={<Text>Немає жодного коментаря</Text>}
+        showsVerticalScrollIndicator={false}
+        data={comments}
+        renderItem={({ item }) => (
+          <View style={styles.postBox}>
+            <Image
+              style={styles.commentUserImage}
+              source={{ uri: item.avatar }}
+            />
+            <View style={styles.commentTextBox}>
+              <Text style={styles.commentText}>{item.text}</Text>
+            </View>
+          </View>
+        )}
+      />
       <View style={styles.inputContainer}>
         <TextInput
           value={text}
@@ -51,10 +63,10 @@ const CommentsScreen = () => {
           placeholder="Коментувати..."
           style={styles.inputStyle}
         />
-        <TouchableOpacity style={styles.sendButton}>
-        <AntDesign name="arrowup" size={24} color="#FFFFFF" />
+        <TouchableOpacity onPress={handleSubmit} style={styles.sendButton}>
+          <AntDesign name="arrowup" size={24} color="#FFFFFF" />
         </TouchableOpacity>
-      </View>      
+      </View>
     </View>
   );
 };
@@ -75,13 +87,14 @@ const styles = StyleSheet.create({
   postBox: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
     paddingHorizontal: 16,
+    paddingBottom: 24,
   },
 
   commentUserImage: {
-    width: 28,
-    height: 28,
+    width: 48,
+    height: 48,
+    borderRadius: 50,    
   },
 
   commentTextBox: {

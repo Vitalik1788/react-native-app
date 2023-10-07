@@ -90,6 +90,8 @@ const CreatePostsScreen = () => {
         longitude: coords.longitude,
       });
       const { region, country } = address[0];
+      let likes = 0;
+      let comments = 0;
 
       const post = {
         postImage: userImg,
@@ -97,6 +99,8 @@ const CreatePostsScreen = () => {
         location,
         region,
         country,
+        likes,
+        comments,
         userId,
       };
 
