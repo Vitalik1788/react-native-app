@@ -14,24 +14,24 @@ import defaultImage from '../../assets/image/default.jpg';
 
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAvatar, selectEmail, selectLogin } from '../redux/auth/authSelectors';
+import { selectAvatar, selectEmail, selectLogin, selectUserId } from '../redux/auth/authSelectors';
 import { getUserPosts } from '../redux/posts/postsOperation';
 import { selectPosts } from '../redux/posts/postsSelectors';
-
 
 const PostsScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const avatar = useSelector(selectAvatar);
+  const userId = useSelector(selectUserId);
+  const login = useSelector(selectLogin);
+  const email = useSelector(selectEmail);
+  const posts = useSelector(selectPosts);
 
   useEffect(() => {
     dispatch(getUserPosts());
   }, [dispatch]);
-
-  const avatar = useSelector(selectAvatar);
-  const login = useSelector(selectLogin);
-  const email = useSelector(selectEmail);
-  const posts = useSelector(selectPosts); 
-
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userContainer}>
@@ -45,8 +45,9 @@ const PostsScreen = () => {
         </View>
       </View>
       <FlatList
+        ListEmptyComponent={<Text>Наразі немає жодної публіції:( Створіть першу:)</Text>}
         showsVerticalScrollIndicator={false}
-        data={posts}
+        data={posts.filter(post => post.userId === userId)}
         renderItem={({ item }) => (
           <View style={styles.cardBox}>
             <Image
@@ -57,7 +58,7 @@ const PostsScreen = () => {
             <View style={styles.statsContainer}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('Comments', { photo: item.postImage })
+                  navigation.navigate('Comments', { photo: item.postImage, cardId: item.uniqueCardId})
                 }
               >
                 <View style={[styles.postStats, { marginRight: 24 }]}>

@@ -16,7 +16,7 @@ import defaultImage from '../../assets/image/default.jpg';
 
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAvatar, selectLogin } from '../redux/auth/authSelectors';
+import { selectAvatar, selectLogin, selectUserId } from '../redux/auth/authSelectors';
 import { logout, updateUser } from '../redux/auth/authOperation';
 import { getUserPosts } from '../redux/posts/postsOperation';
 import { selectPosts } from '../redux/posts/postsSelectors';
@@ -32,6 +32,7 @@ const ProfileScreen = () => {
 
   const avatar = useSelector(selectAvatar);
   const login = useSelector(selectLogin);
+  const userId = useSelector(selectUserId);
   const posts = useSelector(selectPosts);
 
   const logoutUser = () => {
@@ -95,7 +96,7 @@ const ProfileScreen = () => {
           <Text style={styles.userName}>{login}</Text>
           <FlatList
             showsVerticalScrollIndicator={false}
-            data={posts}
+            data={posts.filter(post => post.userId === userId)}
             renderItem={({ item }) => (
               <View style={styles.cardBox}>
                 <Image
@@ -105,7 +106,12 @@ const ProfileScreen = () => {
                 <Text style={styles.imageTitle}>{item.placeName}</Text>
                 <View style={styles.statsContainer}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('Comments')}
+                    onPress={() =>
+                      navigation.navigate('Comments', {
+                        photo: item.postImage,
+                        cardId: item.uniqueCardId,
+                      })
+                    }
                   >
                     <View style={[styles.postStats, { marginRight: 24 }]}>
                       <Feather
@@ -138,7 +144,9 @@ const ProfileScreen = () => {
                         color="#BDBDBD"
                       />
                       <Text style={styles.locationText}>
-                        {item.region}, {item.country}
+                        {item.location
+                          ? item.location
+                          : [item.region, item.country].join(', ')}
                       </Text>
                     </View>
                   </TouchableOpacity>

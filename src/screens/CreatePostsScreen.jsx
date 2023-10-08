@@ -22,6 +22,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUserId } from '../redux/auth/authSelectors';
 import { addPost } from '../redux/posts/postsOperation';
 
+import uuid from 'react-native-uuid';
+
 const CreatePostsScreen = () => {
   const [placeName, setPlaceName] = useState(null);
   const [location, setLocation] = useState(null);
@@ -37,6 +39,7 @@ const CreatePostsScreen = () => {
   const navigation = useNavigation();
   const userId = useSelector(selectUserId);
   const dispatch = useDispatch();
+  const uniqueCardId = uuid.v4();
 
   useEffect(() => {
     (async () => {
@@ -102,6 +105,7 @@ const CreatePostsScreen = () => {
         likes,
         comments,
         userId,
+        uniqueCardId,
       };
 
       dispatch(addPost(post));

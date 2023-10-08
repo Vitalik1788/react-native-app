@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Text, TextInput, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-
 import { useRoute } from '@react-navigation/native';
 import { FlatList } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { selectComments } from '../redux/posts/postsSelectors';
 import { selectAvatar, selectUserId } from '../redux/auth/authSelectors';
 import { addComment, getComments } from '../redux/posts/commentsOperation';
 
 const CommentsScreen = () => {
   const [text, setText] = useState(null);
-  const { params: { photo } } = useRoute();
+  const { params: { photo, cardId } } = useRoute();
   const comments = useSelector(selectComments);
   const avatar = useSelector(selectAvatar);
   const userId = useSelector(selectUserId);
@@ -22,7 +22,7 @@ const CommentsScreen = () => {
   }, [dispatch]);
 
   const handleSubmit = () => {
-    if (!text) {
+    if (!text.trim()) {
       alert("Коментар до фото відсутній")
       return
     }
@@ -31,6 +31,7 @@ const CommentsScreen = () => {
       text,
       avatar,
       userId,
+      cardId,
     }
     dispatch(addComment(comment));
     setText("");
@@ -39,11 +40,10 @@ const CommentsScreen = () => {
   return (
     <View style={styles.container}>
       <Image source={{ uri: photo }} style={styles.postImageStyle} />
-      <FlatList
-        
+      <FlatList        
         ListEmptyComponent={<Text>Немає жодного коментаря</Text>}
         showsVerticalScrollIndicator={false}
-        data={comments}
+        data={comments.filter(comment => comment.cardId === cardId)}
         renderItem={({ item }) => (
           <View style={styles.postBox}>
             <Image
