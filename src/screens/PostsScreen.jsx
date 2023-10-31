@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -16,7 +16,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAvatar, selectEmail, selectLogin, selectUserId } from '../redux/auth/authSelectors';
 import { getUserPosts } from '../redux/posts/postsOperation';
-import { selectPosts } from '../redux/posts/postsSelectors';
+import { selectComments, selectPosts } from '../redux/posts/postsSelectors';
+
 
 const PostsScreen = () => {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ const PostsScreen = () => {
   const login = useSelector(selectLogin);
   const email = useSelector(selectEmail);
   const posts = useSelector(selectPosts);
-
+  
   useEffect(() => {
     dispatch(getUserPosts());
   }, [dispatch]);
@@ -45,7 +46,7 @@ const PostsScreen = () => {
         </View>
       </View>
       <FlatList
-        ListEmptyComponent={<Text>Наразі немає жодної публіції:( Створіть першу:)</Text>}
+        ListEmptyComponent={<Text style={{textAlign: "center", fontSize: 16}}>Наразі немає жодної публіції:( Створіть першу:)</Text>}
         showsVerticalScrollIndicator={false}
         data={posts.filter(post => post.userId === userId)}
         renderItem={({ item }) => (

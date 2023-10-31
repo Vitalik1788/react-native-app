@@ -95,6 +95,7 @@ const ProfileScreen = () => {
           </View>
           <Text style={styles.userName}>{login}</Text>
           <FlatList
+            ListEmptyComponent={<Text style={{textAlign: "center", fontSize: 16}}>Наразі немає жодної публіції:( Створіть першу:)</Text>}
             showsVerticalScrollIndicator={false}
             data={posts.filter(post => post.userId === userId)}
             renderItem={({ item }) => (
