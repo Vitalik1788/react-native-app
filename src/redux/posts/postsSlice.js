@@ -6,7 +6,7 @@ import { addComment, getComments } from "./commentsOperation";
 const postsSlice = createSlice({
   name: 'posts',
   initialState: {
-    items: [],
+    items: null,
     comments: [],
     isLoading: false,
     error: null,
@@ -14,7 +14,11 @@ const postsSlice = createSlice({
   extraReducers: buider =>
     buider
       .addCase(addPost.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
+        return {
+          ...state,
+          items: payload,
+          isLoading: false,
+      }
       })
       .addCase(addPost.pending, (state, _) => {
         state.isLoading = true;
@@ -30,7 +34,10 @@ const postsSlice = createSlice({
         };
       })
       .addCase(addComment.fulfilled, (state, { payload }) => {
-        state.comments.push(payload);
+        return {
+          ...state,
+        comments: payload,
+      }        
       })
       .addCase(getComments.fulfilled, (state, { payload }) => {
         return {

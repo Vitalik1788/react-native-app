@@ -1,7 +1,6 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
   updateProfile,
   signOut,
 } from 'firebase/auth';
@@ -19,31 +18,6 @@ export const register = createAsyncThunk(
         photoURL: photo,
       });
 
-      const {
-        uid,
-        displayName,
-        email: emailBase,
-        photoURL,
-      } = auth.currentUser;
-
-      const userProfile = {
-        userId: uid,
-        login: displayName,
-        email: emailBase,
-        avatar: photoURL,
-      };
-      return userProfile;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-)
-
-export const login = createAsyncThunk(
-  'auth/login',
-  async ({ email, password }, thunkAPI) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password)
       const { uid, displayName, email: emailBase, photoURL } = auth.currentUser;
 
       const userProfile = {
@@ -59,16 +33,34 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk(
-  'auth/logout',
-  async (_, thunkAPI) => {
+export const login = createAsyncThunk(
+  'auth/login',
+  async ({ email, password }, thunkAPI) => {
     try {
-      await signOut(auth);
+      await signInWithEmailAndPassword(auth, email, password);
+
+      const { uid, displayName, email: emailBase, photoURL } = auth.currentUser;
+      const userProfile = {
+        userId: uid,
+        login: displayName,
+        email: emailBase,
+        avatar: photoURL,
+      };
+
+      return userProfile;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+
+export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
 
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
@@ -97,4 +89,3 @@ export const updateUser = createAsyncThunk(
     }
   }
 );
-

@@ -12,17 +12,20 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import bgi from '../../assets/image/BGI2x.jpg';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/auth/authOperation';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 const LoginForm = () => {
   const [activeInput, setActiveInput] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
   const [inputs, setInputs] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({}); 
+  
 
   const navigation = useNavigation();  
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
 
   const handleOnChange = (text, input) => {
     setInputs(prevState => ({ ...prevState, [input]: text }));
@@ -52,12 +55,15 @@ const LoginForm = () => {
     
     const { email, password } = inputs;
 
-    dispatch(login({ email, password }));
+    dispatch(login({ email, password }));    
     
-    setInputs({ email: '', password: '' });
-
-    navigation.navigate('Home');
-
+   onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setInputs({ email: '', password: '' });
+        navigation.navigate('Home');
+        return;
+      } 
+   })    
   };
 
   return (

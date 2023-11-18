@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectComments } from '../redux/posts/postsSelectors';
 import { selectAvatar, selectUserId } from '../redux/auth/authSelectors';
 import { addComment, getComments } from '../redux/posts/commentsOperation';
+import { db } from '../firebase/config';
+import { doc, updateDoc } from 'firebase/firestore';
 
 const CommentsScreen = () => {
   const [text, setText] = useState(null);
@@ -20,6 +22,20 @@ const CommentsScreen = () => {
   useEffect(() => {
     dispatch(getComments());
   }, [dispatch]);
+
+  const updateDataInFirestore = async ({ data }) => {
+    console.log(data);
+    try {
+      const ref = doc(db, "posts", cardId);
+      await updateDoc(ref, {
+        comments: { ...data }
+      });
+      console.log('document updated');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   const handleSubmit = () => {
     if (!text.trim()) {
@@ -34,16 +50,17 @@ const CommentsScreen = () => {
       cardId,
     }
     dispatch(addComment(comment));
+    updateDataInFirestore(comment);
     setText("");
   }
   
   return (
     <View style={styles.container}>
       <Image source={{ uri: photo }} style={styles.postImageStyle} />
-      <FlatList        
+      <FlatList
         ListEmptyComponent={<Text>Немає жодного коментаря</Text>}
         showsVerticalScrollIndicator={false}
-        data={comments.filter(comment => comment.cardId === cardId)}
+        data={comments ? comments.filter(comment => comment.cardId === cardId) : {}}
         renderItem={({ item }) => (
           <View style={styles.postBox}>
             <Image

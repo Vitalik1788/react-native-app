@@ -16,7 +16,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAvatar, selectEmail, selectLogin, selectUserId } from '../redux/auth/authSelectors';
 import { getUserPosts } from '../redux/posts/postsOperation';
-import { selectComments, selectPosts } from '../redux/posts/postsSelectors';
+import { selectPosts } from '../redux/posts/postsSelectors';
+import { getComments } from '../redux/posts/commentsOperation';
 
 
 const PostsScreen = () => {
@@ -27,12 +28,15 @@ const PostsScreen = () => {
   const login = useSelector(selectLogin);
   const email = useSelector(selectEmail);
   const posts = useSelector(selectPosts);
-  
+    
   useEffect(() => {
     dispatch(getUserPosts());
-  }, [dispatch]);
+    dispatch(getComments());
+  }, [dispatch]);  
+
   
-  
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userContainer}>
@@ -46,9 +50,13 @@ const PostsScreen = () => {
         </View>
       </View>
       <FlatList
-        ListEmptyComponent={<Text style={{textAlign: "center", fontSize: 16}}>Наразі немає жодної публіції:( Створіть першу:)</Text>}
+        ListEmptyComponent={
+          <Text style={{ textAlign: 'center', fontSize: 16 }}>
+            Наразі немає жодної публіції:( Створіть першу:)
+          </Text>
+        }
         showsVerticalScrollIndicator={false}
-        data={posts.filter(post => post.userId === userId)}
+        data={posts ? posts.filter(post => post.userId === userId) : {}}
         renderItem={({ item }) => (
           <View style={styles.cardBox}>
             <Image
@@ -59,7 +67,10 @@ const PostsScreen = () => {
             <View style={styles.statsContainer}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('Comments', { photo: item.postImage, cardId: item.uniqueCardId})
+                  navigation.navigate('Comments', {
+                    photo: item.postImage,
+                    cardId: item.uniqueCardId,
+                  })
                 }
               >
                 <View style={[styles.postStats, { marginRight: 24 }]}>

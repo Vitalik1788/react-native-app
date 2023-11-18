@@ -87,7 +87,6 @@ const CreatePostsScreen = () => {
   const handleSubmit = async () => {
     try {
       let { coords } = await Location.getCurrentPositionAsync({});
-      console.log(coords);
       setGetLocation(coords);
       const address = await Location.reverseGeocodeAsync({
         latitude: coords.latitude,
